@@ -1,7 +1,7 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
+import BookIcon from '@material-ui/icons/Book';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -30,6 +30,12 @@ const Copyright = () => {
 const useStyles = makeStyles((theme) => ({
   icon: {
     marginRight: theme.spacing(2),
+  },
+  toolbarTitle: {
+    flexGrow: 1,
+  },
+  link: {
+    margin: theme.spacing(1, 0.8),
   },
   heroContent: {
     backgroundColor: theme.palette.background.paper,
@@ -67,12 +73,18 @@ const App = () => {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="relative">
+      <AppBar position="relative" >
         <Toolbar>
-          <CameraIcon className={classes.icon} />
-          <Typography variant="h6" color="inherit" noWrap>
-            Album layout
-            </Typography>
+          <BookIcon className={classes.icon} />
+          <Typography variant="h6" color="inherit" noWrap className={classes.toolbarTitle}>
+            Book Management App
+          </Typography>
+          <Button href="#" variant="outlined" color="secondary" className={classes.link}>
+            新規登録
+          </Button>
+          <Button href="#" variant="outlined" color="secondary" className={classes.link}>
+            ログイン
+          </Button>
         </Toolbar>
       </AppBar>
       <main>
@@ -83,9 +95,7 @@ const App = () => {
               Album layout
               </Typography>
             <Typography variant="h5" align="center" color="textSecondary" paragraph>
-              Something short and leading about the collection below—its contents, the creator, etc.
-              Make it short and sweet, but not too short so folks don&apos;t simply skip over it
-              entirely.
+              Something
               </Typography>
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
