@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as RouteLink} from 'react-router-dom';
+import { Link as RouteLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -103,7 +103,7 @@ const SignUp = () => {
           </Button>
             <Grid container justify="flex-end">
               <Grid item>
-                すでにアカウントをお持ちの方： 
+                すでにアカウントをお持ちの方
                 <Link to="/signin" component={RouteLink} variant="body2">
                   ログイン
               </Link>
