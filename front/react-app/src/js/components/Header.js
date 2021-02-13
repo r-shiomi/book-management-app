@@ -35,7 +35,7 @@ const Header = () => {
           <Button to="/signup" component={Link} variant="contained" className={classes.link}>
             新規登録
           </Button>
-          <Button to="/signin" component={Link} variant="outlined" color="inherit" className={classes.link}>
+          <Button to="/login" component={Link} variant="outlined" color="inherit" className={classes.link}>
             ログイン
           </Button>
         </Toolbar>

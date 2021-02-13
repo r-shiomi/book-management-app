@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import { FormHelperText } from '@material-ui/core';
 
 const Copyright = () => {
   return (
@@ -26,8 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const Footer = () => {
   const classes = useStyles();
 
-  return (
-    <React.Fragment>
+  return ( 
       <footer className={classes.footer}>
         <Typography variant="h6" align="center" gutterBottom>
           Footer
@@ -37,7 +37,6 @@ const Footer = () => {
             </Typography>
         <Copyright />
       </footer>
-    </React.Fragment>
   );
 }
 

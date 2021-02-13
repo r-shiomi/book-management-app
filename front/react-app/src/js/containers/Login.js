@@ -33,11 +33,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn = () => {
+const Login = () => {
   const classes = useStyles();
 
   return (
-    <React.Fragment>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -99,8 +98,7 @@ const SignIn = () => {
           </form>
         </div>
       </Container>
-    </React.Fragment>
   );
 }
 
-export default SignIn;
+export default Login;
