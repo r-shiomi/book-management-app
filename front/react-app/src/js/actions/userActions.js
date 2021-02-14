@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 export const SIGNUP_STARTED = 'SIGNUP_STARTED'
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS'
 export const SIGNUP_FAILURE = 'SIGNUP_FAILURE'
@@ -27,6 +28,7 @@ export const signUp = (state) => {
   return dispatch => {
     dispatch(signupStarted());
     axios.post('http://localhost:3000/auth', {
+      'name': state.name,
       'email': state.email,
       'password': state.password,
       'password_confirmation': state.password
@@ -41,7 +43,9 @@ export const signUp = (state) => {
       })
       .catch(err => {
         console.log(err.response);
+        
         dispatch(signupFailure(err));
+
       });
   }
 }

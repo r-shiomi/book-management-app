@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { Link as RouteLink } from 'react-router-dom';
+import { Link as RouteLink, Redirect, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -38,8 +38,11 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = () => {
   const classes = useStyles();
-  const [state, setState] = useState({ userName: '', email: '', password: '' });
+  const [state, setState] = useState({ name: '', email: '', password: '' });
+  const user = useSelector(state => state.userReducer.user);
+  const isSignedup = useSelector(state => state.userReducer.isSignedup);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -47,11 +50,17 @@ const SignUp = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(state.userName);
+    console.log(state.name);
     console.log(state.email);
     console.log(state.password);
     dispatch(signUp(state));
+    console.log("遷移");
+    // history.push("/");
   };
+
+  // if (isSignedup) {
+  //   return (<Redirect to={'/'} />)
+  // }
 
   return (
     <Container maxWidth="xs">
@@ -68,14 +77,15 @@ const SignUp = () => {
             <Grid item xs={12}>
               <TextField
                 autoComplete="fname"
-                name="userName"
+                name="name"
                 variant="outlined"
                 required
                 fullWidth
-                id="userName"
+                id="name"
                 label="ユーザー名"
                 autoFocus
                 onChange={handleChange}
+                helperText="20文字以内"
               />
             </Grid>
             <Grid item xs={12}>
@@ -101,6 +111,7 @@ const SignUp = () => {
                 id="password"
                 autoComplete="current-password"
                 onChange={handleChange}
+                helperText="半角英数字 8 〜 128文字"
               />
             </Grid>
             <Grid item xs={12}>
@@ -122,7 +133,7 @@ const SignUp = () => {
           <Grid container justify="flex-end">
             <Grid item>
               すでにアカウントをお持ちの方：
-                <Link to="/signin" component={RouteLink} variant="body2">
+                <Link to="/login" component={RouteLink} variant="body2">
                 ログイン
               </Link>
             </Grid>
