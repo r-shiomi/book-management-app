@@ -8,9 +8,9 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins "localhost:8000"
-
     resource "*",
       headers: :any,
+      expose: ["expiry", "token-type", "access-token", "uid", "client"], # クライアント側で受け取りたいheadersを設定
       methods: [:get, :post, :put, :patch, :delete, :options, :head]
   end
 end

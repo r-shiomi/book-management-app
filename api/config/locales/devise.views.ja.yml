@@ -1,4 +1,7 @@
 ja:
+  devise_token_auth:
+    sessions:
+      bad_credentials: "メールアドレスまたはパスワードが正しくありません"
   activerecord:
     errors:
       models:
@@ -19,7 +22,7 @@ ja:
               blank: "が入力されていません。"
               too_short: "は%{count}文字以上に設定して下さい。"
               too_long: "は%{count}文字以下に設定して下さい。"
-              invalid: "は有効でありません。"
+              invalid: "は有効ではありません。"
               confirmation: "が内容とあっていません。"
     attributes:
       user:

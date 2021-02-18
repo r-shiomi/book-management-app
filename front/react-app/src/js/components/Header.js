@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import BookIcon from '@material-ui/icons/Book';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -25,7 +24,6 @@ const Header = () => {
 
   return (
     <React.Fragment>
-      <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
           <BookIcon className={classes.icon} />

@@ -1,18 +1,17 @@
-import { React, useState } from 'react';
-import { Link as RouteLink, Redirect, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
-import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import { React, useEffect, useState } from 'react';
+import { useDispatch } from "react-redux";
+import { Link as RouteLink, useHistory } from 'react-router-dom';
 import { signUp } from "../actions/userActions";
 
 const useStyles = makeStyles((theme) => ({
@@ -38,11 +37,12 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = () => {
   const classes = useStyles();
-  const [state, setState] = useState({ name: '', email: '', password: '' });
-  const user = useSelector(state => state.userReducer.user);
-  const isSignedup = useSelector(state => state.userReducer.isSignedup);
   const dispatch = useDispatch();
   const history = useHistory();
+  const [state, setState] = useState({ name: '', email: '', password: '', history: history });
+  const [error, setError] = useState(null);
+  const [helperText, setHelperText] = useState({ name: '20文字以内', email: '', password: '8 〜 128文字' });
+  const [errFlg, setErrFlg] = useState({ name: false, email: false, password: false });
 
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -50,21 +50,31 @@ const SignUp = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log(state.name);
-    console.log(state.email);
-    console.log(state.password);
-    dispatch(signUp(state));
-    console.log("遷移");
-    // history.push("/");
+    dispatch(signUp(state, setError));
   };
 
-  // if (isSignedup) {
-  //   return (<Redirect to={'/'} />)
-  // }
+  useEffect(() => {
+    if (error) {
+      //エラー項目にはエラーメッセージを設定
+      setHelperText({
+        ...helperText,
+        name: error.data.errors.name == null ? "20文字以内" : "ユーザー名" + error.data.errors.name[0],
+        email: error.data.errors.email == null ? "" : "メールアドレス" + error.data.errors.email[0],
+        password: error.data.errors.password == null ? "8 〜 128文字" : "パスワード" + error.data.errors.password[0]
+      });
 
+      setErrFlg({
+        ...errFlg,
+        name: error.data.errors.name == null ? false : true,
+        email: error.data.errors.email == null ? false : true,
+        password: error.data.errors.password == null ? false : true
+      });
+    }
+  }, [error])
+
+  
   return (
     <Container maxWidth="xs">
-      <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -85,7 +95,8 @@ const SignUp = () => {
                 label="ユーザー名"
                 autoFocus
                 onChange={handleChange}
-                helperText="20文字以内"
+                helperText={helperText.name}
+                error={errFlg.name}
               />
             </Grid>
             <Grid item xs={12}>
@@ -98,6 +109,8 @@ const SignUp = () => {
                 name="email"
                 autoComplete="email"
                 onChange={handleChange}
+                helperText={helperText.email}
+                error={errFlg.email}
               />
             </Grid>
             <Grid item xs={12}>
@@ -111,7 +124,8 @@ const SignUp = () => {
                 id="password"
                 autoComplete="current-password"
                 onChange={handleChange}
-                helperText="半角英数字 8 〜 128文字"
+                helperText={helperText.password}
+                error={errFlg.password}
               />
             </Grid>
             <Grid item xs={12}>

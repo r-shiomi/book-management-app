@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import { FormHelperText } from '@material-ui/core';
 
 const Copyright = () => {
   return (
@@ -19,24 +18,26 @@ const Copyright = () => {
 
 const useStyles = makeStyles((theme) => ({
   footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
+    padding: theme.spacing(3, 2),
+    marginTop: 'auto',
+    backgroundColor:
+      theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
   },
 }));
 
 const Footer = () => {
   const classes = useStyles();
 
-  return ( 
-      <footer className={classes.footer}>
-        <Typography variant="h6" align="center" gutterBottom>
-          Footer
+  return (
+    <footer className={classes.footer}>
+      <Typography variant="h6" align="center" gutterBottom>
+        Footer
             </Typography>
-        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          Something here to give the footer a purpose!
+      <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
+        Something here to give the footer a purpose!
             </Typography>
-        <Copyright />
-      </footer>
+      <Copyright />
+    </footer>
   );
 }
 
