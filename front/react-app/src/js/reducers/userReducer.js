@@ -1,7 +1,10 @@
 import {
   SIGNUP_STARTED,
   SIGNUP_SUCCESS,
-  SIGNUP_FAILURE
+  SIGNUP_FAILURE,
+  LOGIN_STARTED,
+  LOGIN_SUCCESS,
+  LOGIN_FAILURE
 } from '../actions/userActions';
 
 const initialState = {
@@ -11,22 +14,33 @@ const initialState = {
     name: null,
     age: null,
   },
-  isSigningup: false,
-  isSignedup: false,
+  loading: false,
+  isLoggedin: false,
   error: null,
 }
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
     case SIGNUP_STARTED: {
-      return { ...state, isSigningup: true };
+      return { ...state, loading: true };
     }
     case SIGNUP_FAILURE: {
-      return { ...state, isSigningup: false, error: action.payload };
+      return { ...state, loading: false, error: action.payload };
     }
     case SIGNUP_SUCCESS: {
-      return { ...state, isSigningup: false, isSignedup: true, user: action.payload };
+      return { ...state, loading: false, user: action.payload };
     }
+      
+    case LOGIN_STARTED: {
+      return { ...state, loading: true };
+    }
+    case LOGIN_FAILURE: {
+      return { ...state, loading: false, error: action.payload };
+    }
+    case LOGIN_SUCCESS: {
+      return {...state, loading: false, isLoggedin: true, user: action.payload}
+    }
+      
   }
   return state;
 }

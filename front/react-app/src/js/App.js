@@ -8,6 +8,8 @@ import Home from './components/Home';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
 import SignUpConfirm from './components/SignUpConfirm';
+import UserRoute from './components/auth/UserRoute';
+import GuestRoute from './components/auth/GuestRoute';
 
 const theme = createMuiTheme({
   palette: {
@@ -43,9 +45,13 @@ const App = () => {
         <main className={classes.main}>
           <Switch>
             <Route exact path='/' component={Home} />
-            <Route exact path='/signup' component={SignUp} />
-            <Route exact path='/signup/confirm' component={SignUpConfirm} />
-            <Route path='/login' component={Login} />
+            {/* <UserRoute>
+              </UserRoute> */}
+            <GuestRoute>
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={SignUp} />
+              <Route path="/signup/confirm" component={SignUpConfirm} />
+            </GuestRoute>
           </Switch>
         </main>
         <Footer />

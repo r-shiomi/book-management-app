@@ -1,11 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import BookIcon from '@material-ui/icons/Book';
-import Toolbar from '@material-ui/core/Toolbar';
 import { makeStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import BookIcon from '@material-ui/icons/Book';
+import React from 'react';
+import HeaderMenu from './HeaderMenu';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -13,9 +12,6 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbarTitle: {
     flexGrow: 1,
-  },
-  link: {
-    margin: theme.spacing(1, 0.8),
   },
 }));
 
@@ -30,12 +26,7 @@ const Header = () => {
           <Typography variant="h6" noWrap className={classes.toolbarTitle}>
             Book Management App
           </Typography>
-          <Button to="/signup" component={Link} variant="contained" className={classes.link}>
-            新規登録
-          </Button>
-          <Button to="/login" component={Link} variant="outlined" color="inherit" className={classes.link}>
-            ログイン
-          </Button>
+          <HeaderMenu />
         </Toolbar>
       </AppBar>
     </React.Fragment>
