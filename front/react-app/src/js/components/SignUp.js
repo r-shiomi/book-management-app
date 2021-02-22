@@ -39,8 +39,7 @@ const SignUp = () => {
   const history = useHistory();
   const [state, setState] = useState({ name: '', email: '', password: '', history: history });
   const [error, setError] = useState(null);
-  const [helperText, setHelperText] = useState({ name: '20文字以内', email: '', password: '8 〜 128文字' });
-  const [errFlg, setErrFlg] = useState({ name: false, email: false, password: false });
+  const [errorText, setErrorText] = useState({ name: '', email: '', password: '' });
 
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
@@ -54,23 +53,16 @@ const SignUp = () => {
   useEffect(() => {
     if (error) {
       //エラー項目にはエラーメッセージを設定
-      setHelperText({
-        ...helperText,
-        name: error.data.errors.name == null ? "20文字以内" : "ユーザー名" + error.data.errors.name[0],
-        email: error.data.errors.email == null ? "" : "メールアドレス" + error.data.errors.email[0],
-        password: error.data.errors.password == null ? "8 〜 128文字" : "パスワード" + error.data.errors.password[0]
-      });
-
-      setErrFlg({
-        ...errFlg,
-        name: error.data.errors.name == null ? false : true,
-        email: error.data.errors.email == null ? false : true,
-        password: error.data.errors.password == null ? false : true
+      setErrorText({
+        ...errorText,
+        name: error.data.errors.name ? "ユーザー名" + error.data.errors.name[0] : "",
+        email: error.data.errors.email ? "メールアドレス" + error.data.errors.email[0] : "",
+        password: error.data.errors.password ? "パスワード" + error.data.errors.password[0] : ""
       });
     }
   }, [error])
 
-  
+
   return (
     <Container maxWidth="xs">
       <div className={classes.paper}>
@@ -92,9 +84,11 @@ const SignUp = () => {
                 id="name"
                 label="ユーザー名"
                 autoFocus
+                multiline
+                placeholder="20文字以内"
                 onChange={handleChange}
-                helperText={helperText.name}
-                error={errFlg.name}
+                helperText={errorText.name}
+                error={errorText.name ? true : false}
               />
             </Grid>
             <Grid item xs={12}>
@@ -106,9 +100,11 @@ const SignUp = () => {
                 label="メールアドレス"
                 name="email"
                 autoComplete="email"
+                multiline
+                placeholder=""
                 onChange={handleChange}
-                helperText={helperText.email}
-                error={errFlg.email}
+                helperText={errorText.email}
+                error={errorText.email ? true : false}
               />
             </Grid>
             <Grid item xs={12}>
@@ -121,9 +117,11 @@ const SignUp = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                multiline
+                placeholder="8 〜 128文字"
                 onChange={handleChange}
-                helperText={helperText.password}
-                error={errFlg.password}
+                helperText={errorText.password}
+                error={errorText.password ? true : false}
               />
             </Grid>
           </Grid>

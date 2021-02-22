@@ -40,7 +40,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [state, setState] = useState({ email: '', password: '', history: history });
-  const [error, setError] = useState(null);
   const [errorText, setErrorText] = useState("");
 
   const handleChange = e => {
@@ -49,14 +48,8 @@ const Login = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(login(state, setError));
+    dispatch(login(state, setErrorText));
   };
-
-  useEffect(() => {
-    if (error) {
-      setErrorText(error.data.errors[0]);
-    }
-  }, [error])
 
   return (
     <Container component="main" maxWidth="xs">
@@ -67,7 +60,7 @@ const Login = () => {
         <Typography component="h1" variant="h5">
           ログイン
         </Typography>
-        {error && <Alert severity="error">{errorText}</Alert>}
+        {errorText && <Alert severity="error">{errorText}</Alert>}
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
           <TextField
             variant="outlined"
@@ -80,7 +73,7 @@ const Login = () => {
             autoComplete="email"
             autoFocus
             onChange={handleChange}
-            error={error ? true : false}
+            error={errorText ? true : false}
           />
           <TextField
             variant="outlined"
@@ -93,7 +86,7 @@ const Login = () => {
             id="password"
             autoComplete="current-password"
             onChange={handleChange}
-            error={error ? true : false}
+            error={errorText ? true : false}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
