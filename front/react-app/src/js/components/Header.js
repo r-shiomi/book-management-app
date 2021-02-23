@@ -61,7 +61,7 @@ const Header = () => {
       <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary} >
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
           <Tab to="/" component={RouteLink} label={<div><HomeIcon style={{ verticalAlign: 'middle' }} /> トップ </div>} {...a11yProps(0)} className={classes.tab} />
-          <Tab to="/search-book" component={RouteLink} label={<div><SearchIcon style={{ verticalAlign: 'middle' }} /> 書籍検索 </div>} {...a11yProps(0)} className={classes.tab} />
+          <Tab to="/book-search" component={RouteLink} label={<div><SearchIcon style={{ verticalAlign: 'middle' }} /> 書籍検索 </div>} {...a11yProps(0)} className={classes.tab} />
           <Tab label="login" {...a11yProps(1)} className={classes.tab} />
           <Tab label="Item Three" {...a11yProps(2)} className={classes.tab} />
         </Tabs>

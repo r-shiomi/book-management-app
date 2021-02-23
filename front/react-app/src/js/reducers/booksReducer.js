@@ -6,20 +6,22 @@ import {
 
 const initialState = {
   books: [],
-  loading: false,
+  fetching: false,
+  fetched: false,
   error: null,
+
 }
 
 const booksReducer = (state = initialState, action) => {
   switch (action.type) {
     case SEARCH_STARTED: {
-      return { ...state, loading: true };
+      return { ...state, fetching: true };
     }
     case SEARCH_FAILURE: {
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, fetching: false, error: action.payload };
     }
     case SEARCH_SUCCESS: {
-      return { ...state, loading: false, books: action.payload };
+      return { ...state, fetching: false, fetched:true, books: action.payload };
     }
       
   }

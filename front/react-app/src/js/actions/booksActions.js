@@ -4,12 +4,14 @@ export const SEARCH_STARTED = 'SEARCH_STARTED'
 export const SEARCH_SUCCESS = 'SEARCH_SUCCESS'
 export const SEARCH_FAILURE = 'SEARCH_FAILURE'
 
-export const search = (keyword) => {
+export const search = (state) => {
   return dispatch => {
     dispatch({ type: SEARCH_STARTED });
+    console.log(state.page)
     axios.get('http://localhost:3000/api/v1/search', {
       params: {
-        keyword: keyword
+        'keyword': state.keyword,
+        'page': state.page
       }
     }
     )

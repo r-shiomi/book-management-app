@@ -13,18 +13,20 @@ module Api
             booksGenreId: "001",
             keyword: params[:keyword], 
             hits: 10, #1ページあたりの取得件数 指定範囲:1~30
-            page: 1, #取得ページ 指定範囲:1~100
+            page: params[:page], #取得ページ 指定範囲:1~100
             sort: "standard", # "-releaseDate":発売日(新しい)
           })
         
         client = HTTPClient.new
         rakuten_res = client.get(uri,query)
+        resData = {"totalPageCount": JSON.parse(rakuten_res.body)["pageCount"]}
         books = []
         JSON.parse(rakuten_res.body)["Items"].each do |item|
           books << read(item)
         end
 
-        render json: {status: 'SUCCESS', message: 'Loaded books', data: books}
+        resData["Items"] = books
+        render json: {status: 'SUCCESS', message: 'Loaded books', data: resData}
       end
 
       private
