@@ -31,7 +31,7 @@ export const signUp = (state, setError) => {
         console.log(res.headers['access-token']);
 
         //新規登録後、確認メール送信画面へ遷移
-        state.history.push('/signup/confirm');
+        state.history.replace('/signup/confirm');
         dispatch({ type: SIGNUP_SUCCESS, payload: res.data.data});
       })
       .catch(err => {
@@ -42,7 +42,7 @@ export const signUp = (state, setError) => {
   }
 }
 
-export const login = (state, setError) => {
+export const login = (state, setErrorText) => {
   return dispatch => {
     dispatch({ type: LOGIN_STARTED });
     axios.post('http://localhost:3000/auth/sign_in', {
@@ -66,7 +66,7 @@ export const login = (state, setError) => {
       })
       .catch(err => {
         console.log(err.response);
-        setError(err.response);
+        setErrorText(err.response.data.errors[0]);
         dispatch({ type: LOGIN_FAILURE, payload: err });
       });
   }

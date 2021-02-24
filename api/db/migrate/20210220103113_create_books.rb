@@ -10,7 +10,6 @@ class CreateBooks < ActiveRecord::Migration[6.0]
       t.string :large_image_url
       t.string :medium_image_url
       t.string :item_url
-      t.string :amazon_item_url
       t.string :page_count
 
       t.timestamps
