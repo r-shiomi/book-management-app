@@ -14,13 +14,13 @@ import Alert from '@material-ui/lab/Alert';
 import Pagination from '@material-ui/lab/Pagination';
 import { React, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { Link as RouteLink } from 'react-router-dom';
 import { search } from "../actions/booksActions";
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    // flexDirection: 'column',
-    // alignItems: 'center',
     justifyContent: 'flex-start',
     flexWrap: 'wrap',
   },
@@ -135,13 +135,13 @@ const BookSearch = () => {
           </Typography>
           <List className={classes.list} >
             {books.Items.map(book =>
-              <div>
+              <Paper>
                 <ListItem alignItems="flex-start">
-                  <Link href="/">
+                  <Link to={`/book/${book.id}`} component={RouteLink}>
                     <img className={classes.img} src={book.mediumImageUrl} />
                   </Link>
                   <ListItemText
-                    primary={<Link href="/">{book.title}</Link>}
+                    primary={<Link to={`/book/${book.id}`} component={RouteLink}>{book.title}</Link>}
                     className={classes.listItemText}
                     secondary={
                       <Typography
@@ -156,7 +156,7 @@ const BookSearch = () => {
                   />
                 </ListItem>
                 <Divider />
-              </div>
+              </Paper>
             )}
           </List>
           <div className={classes.pagenationRoot}>

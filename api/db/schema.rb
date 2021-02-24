@@ -13,16 +13,16 @@
 ActiveRecord::Schema.define(version: 2021_02_20_103113) do
 
   create_table "books", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "googlebooks_id"
     t.string "title"
     t.string "author"
-    t.string "publisher"
-    t.string "published_date"
-    t.text "description"
-    t.integer "page_count"
-    t.string "category"
-    t.string "thumbnail"
+    t.string "publisher_name"
+    t.string "sales_date"
+    t.text "item_caption"
     t.string "isbn"
+    t.string "large_image_url"
+    t.string "medium_image_url"
+    t.string "item_url"
+    t.string "page_count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

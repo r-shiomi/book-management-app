@@ -11,6 +11,8 @@ import SignUpConfirm from './components/SignUpConfirm';
 import UserRoute from './components/auth/UserRoute';
 import GuestRoute from './components/auth/GuestRoute';
 import BookSearch from './components/BookSearch';
+import BookDetail from './components/BookDetail';
+import BookShelf from './components/BookShelf';
 
 const theme = createMuiTheme({
   palette: {
@@ -46,13 +48,15 @@ const App = () => {
         <main className={classes.main}>
           <Switch>
             <Route exact path='/' component={Home} />
-            <Route exact path='/book-search' component={BookSearch}/>
+            <Route exact path='/book-search' component={BookSearch} />
+            <Route exact path='/book/:bookId' component={BookDetail} />
+            <Route exact path='/book-shelf' component={BookShelf} />
             {/* <UserRoute>
               </UserRoute> */}
             <GuestRoute>
               <Route path="/login" component={Login} />
-              <Route path="/signup" component={SignUp} />
-              <Route path="/signup/confirm" component={SignUpConfirm} />
+              <Route exact path="/signup" component={SignUp} />
+              <Route exact path="/signup/confirm" component={SignUpConfirm} />
             </GuestRoute>
           </Switch>
         </main>
