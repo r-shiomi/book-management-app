@@ -43,6 +43,7 @@ module Api
           #レスポンス用にjson化
           resBooks << to_json(book)
         end
+
         resData = { "totalPageCount": JSON.parse(rakuten_res.body)["pageCount"] }
         resData["Items"] = resBooks
         render json: { status: "SUCCESS", message: "Loaded books", data: resData }
