@@ -7,7 +7,7 @@ module Api
       before_action :set_book, only: [:show]
 
       def show
-        book = to_json(@book)
+        book = book_to_json(@book)
         render json: { status: "SUCCESS", message: "Loaded the book", data: book }
       end
 
@@ -41,7 +41,7 @@ module Api
           end
 
           #レスポンス用にjson化
-          resBooks << to_json(book)
+          resBooks << book_to_json(book)
         end
 
         resData = { "totalPageCount": JSON.parse(rakuten_res.body)["pageCount"] }
@@ -67,7 +67,7 @@ module Api
         }
       end
 
-      def to_json(data)
+      def book_to_json(data)
         {
           "id": data.id,
           "title": data.title,
@@ -80,7 +80,28 @@ module Api
           "mediumImageUrl": data.medium_image_url,
           "itemUrl": data.item_url,
           "pageCount": data.page_count,
+          "reviews": reviews_to_json(data.reviews)
         }
+      end
+
+      def reviews_to_json(reviews)
+        puts 'reviews_to_json'
+        res = []
+        reviews.each do |review|
+          puts review.id
+          puts review.user.name 
+          res <<
+            {
+              "id": review.id,
+              "content": review.content,
+              "createdAt": review.created_at.strftime("%Y-%m-%d %H:%M"),
+              "updatedAt": review.updated_at.strftime("%Y-%m-%d %H:%M"),
+              "userId": review.user.id,
+              "userName": review.user.name,
+            }
+            puts res
+        end
+        return res
       end
 
       #OpenbdApiからページ数を取得する

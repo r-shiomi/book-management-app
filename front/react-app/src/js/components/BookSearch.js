@@ -14,7 +14,7 @@ import Alert from '@material-ui/lab/Alert';
 import Pagination from '@material-ui/lab/Pagination';
 import { React, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { Link as RouteLink } from 'react-router-dom';
+import { Link as RouteLink, useParams } from 'react-router-dom';
 import { search } from "../actions/booksActions";
 import Paper from '@material-ui/core/Paper';
 
@@ -96,7 +96,6 @@ const BookSearch = () => {
     }
   }, [books])
 
-
   return (
     <Container maxWidth="md" className={classes.root}>
       <Typography component="h1" variant="h3" align="center" color="textPrimary" gutterBottom>
@@ -134,8 +133,8 @@ const BookSearch = () => {
             検索結果
           </Typography>
           <List className={classes.list} >
-            {books.Items.map(book =>
-              <Paper>
+            {books.Items.map((book,idx) =>
+              <Paper key={idx}>
                 <ListItem alignItems="flex-start">
                   <Link to={`/book/${book.id}`} component={RouteLink}>
                     <img className={classes.img} src={book.mediumImageUrl} />
