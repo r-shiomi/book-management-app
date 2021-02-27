@@ -5,6 +5,7 @@ module Api
 
       def create
         review = Review.new(content: params[:content], user_id: current_user.id, book_id: params[:bookId])
+        
         if review.save
           render json: { status: "SUCCESS", data: review }
         else

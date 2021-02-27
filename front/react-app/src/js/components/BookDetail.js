@@ -1,37 +1,34 @@
-import { React, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { getBook } from "../actions/bookActions";
-import { createReview } from "../actions/reviewActions";
-import { Link as RouteLink, useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import RateReviewIcon from '@material-ui/icons/RateReview';
-import TextField from '@material-ui/core/TextField';
+import Collapse from '@material-ui/core/Collapse';
+import Container from '@material-ui/core/Container';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Collapse from '@material-ui/core/Collapse';
+import Divider from '@material-ui/core/Divider';
 import Link from '@material-ui/core/Link';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import Snackbar from '@material-ui/core/Snackbar';
+import RateReviewIcon from '@material-ui/icons/RateReview';
 import Alert from '@material-ui/lab/Alert';
+import Pagination from '@material-ui/lab/Pagination';
+import { React, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { Link as RouteLink, useParams } from 'react-router-dom';
+import { getBook } from "../actions/bookActions";
+import { createReview } from "../actions/reviewActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    // display: 'flex',
-    // justifyContent: 'flex-start',
     flexWrap: 'wrap',
     flexDirection: 'column',
     width: '50%',
@@ -73,6 +70,11 @@ const useStyles = makeStyles((theme) => ({
   },
   openTextButton: {
     display: 'flex',
+  },
+  pagenationRoot: {
+    justifyContent: 'center',
+    display: 'flex',
+    marginTop: theme.spacing(2),
   }
 }));
 
@@ -83,12 +85,10 @@ const BookDetail = () => {
   const book = useSelector(state => state.bookReducer.book);
   const [anchorEl, setAnchorEl] = useState(null);
   const [open, setOpen] = useState(false);
-  const [state, setState] = useState({ content: '', bookId: bookId });
+  const [state, setState] = useState({ content: '', bookId: bookId, reviewPage: 1 });
   const [checked, setChecked] = useState({});
-  const [openText, setOpenText] = useState(false);
-  const fetched = useSelector(state => state.reviewReducer.fetched);
-  // const [createdReviewText, setCreatedReviewText] = useState('');
   const [reviewAlertOpen, setReviewAlertOpen] = useState(false);
+  const isFirstRender = useRef(false);
 
   const reviewAlertClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -101,7 +101,6 @@ const BookDetail = () => {
   //続きを読むをクリックされた時のテキスト表示変更処理
   const handleReviewContentChange = (idx) => {
     setChecked({ ...checked, [idx]: !checked[idx] });
-    setOpenText(!openText);
   };
 
   const handleDialogOpen = () => {
@@ -126,7 +125,7 @@ const BookDetail = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(createReview(state));
+    dispatch(createReview(state, setReviewAlertOpen));
     handleDialogClose();
   };
 
@@ -142,15 +141,21 @@ const BookDetail = () => {
   }
 
   useEffect(() => {
-    dispatch(getBook(bookId));
-  }, [bookId])
+    dispatch(getBook(state));
+  }, [state.bookId])
 
-  //レビューを投稿した時
+  useEffect(() => { // このeffectは初回レンダー時のみ呼ばれる
+    isFirstRender.current = true;
+  }, [])
+
+  //ページネーションのページを押下すると検索アクションが発行
   useEffect(() => {
-    if (fetched) {
-      setReviewAlertOpen(true);
+    if (isFirstRender.current) { // 初回レンダー判定
+      isFirstRender.current = false;
+    } else {
+      dispatch(getBook(state));
     }
-  },[fetched])
+  }, [state.reviewPage]);
 
   return (
     <Container className={classes.root}>
@@ -200,7 +205,7 @@ const BookDetail = () => {
                 レビューを投稿しました
               </Alert>
             </Snackbar>
-            
+
             <Button variant="outlined" color="default" startIcon={<RateReviewIcon />} onClick={handleDialogOpen} className={classes.buttonGroup}>
               レビューを書く
             </Button>
@@ -252,9 +257,9 @@ const BookDetail = () => {
             {
               isHighThanMaxTextHeight(review.content) &&
               <Link component="button" className={classes.openTextLink}>
-                <Typography className={classes.openTextButton } variant="body1" onClick={() => handleReviewContentChange(idx)} >
-                  {openText ? "閉じる" : "続きを読む"}
-                  {openText ? <ExpandLess /> : <ExpandMore />}
+                <Typography className={classes.openTextButton} variant="body1" onClick={() => handleReviewContentChange(idx)} >
+                  {checked[idx] || false ? "閉じる" : "続きを読む"}
+                  {checked[idx] || false ? <ExpandLess /> : <ExpandMore />}
                 </Typography>
               </Link>
             }
@@ -268,6 +273,15 @@ const BookDetail = () => {
           書評・レビューがありません
         </Typography>
       }
+      {book.reviews !== undefined &&
+        <Pagination
+          className={classes.pagenationRoot}
+          count={book.maxPage}
+          color="primary"
+          shape="rounded"
+          onChange={(e, page) => setState({ ...state, reviewPage: page })}
+          page={state.reviewPage}
+        />}
     </Container >
 
 
