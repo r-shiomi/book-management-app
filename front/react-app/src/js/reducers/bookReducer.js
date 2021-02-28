@@ -22,7 +22,7 @@ const bookReducer = (state = initialState, action) => {
     case GET_BOOK_SUCCESS: {
       return { ...state, fetching: false, fetched:true, book: action.payload };
     }
-      
+  
   }
   return state;
 }

@@ -7,7 +7,8 @@ export const SEARCH_FAILURE = 'SEARCH_FAILURE'
 export const search = (state) => {
   return dispatch => {
     dispatch({ type: SEARCH_STARTED });
-    console.log(state.page)
+    console.log(state.page);
+    console.log(state.keyword);
     axios.get('http://localhost:3000/api/v1/search', {
       params: {
         'keyword': state.keyword,

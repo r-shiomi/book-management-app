@@ -12,10 +12,11 @@
 #  large_image_url  :string(255)
 #  medium_image_url :string(255)
 #  item_url         :string(255)
-#  amazon_item_url  :string(255)
 #  page_count       :string(255)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
 class Book < ApplicationRecord
+  has_many :reviews, dependent: :delete_all
+  has_many :users, through: :reviews
 end
