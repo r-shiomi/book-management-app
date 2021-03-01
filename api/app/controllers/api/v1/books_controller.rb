@@ -11,8 +11,14 @@ module Api
         hits = 10 #1ページあたりの取得件数
         book = book_to_json(@book)
         start_index = (review_page - 1) * hits
-        book["maxPage"] = (book[:reviews].length / 10.to_f).ceil;
-        book[:reviews] = book[:reviews].slice(start_index,hits);
+        book["maxPage"] = (book[:reviews].length / 10.to_f).ceil
+        book[:reviews] = book[:reviews].slice(start_index, hits)
+        #対象の本が本棚に登録されている時、そのステータスを返す
+        if book_shelf = BookShelf.find_by(book_id: book[:id], user_id: current_user.id)
+          book[:bookShelfId] = book_shelf.id
+          book[:bookShelfStatus] = book_shelf.status
+        end
+
         render json: { status: "SUCCESS", message: "Loaded the book", data: book }
       end
 
@@ -85,7 +91,7 @@ module Api
           "mediumImageUrl": data.medium_image_url,
           "itemUrl": data.item_url,
           "pageCount": data.page_count,
-          "reviews": reviews_to_json(data.reviews)
+          "reviews": reviews_to_json(data.reviews),
         }
       end
 

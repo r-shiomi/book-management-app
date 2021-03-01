@@ -8,6 +8,6 @@ import persistState from 'redux-localstorage';
 import reducer from "./reducers";
 
 const promise = createPromise({ types: { fulfilled: 'success' } });
-const middleware = compose(applyMiddleware(promise, thunk, createLogger()), persistState("userReducer"));
+const middleware = compose(applyMiddleware(promise, thunk, createLogger()), persistState(["userReducer","booksReducer"]));
 
 export default createStore(reducer, middleware);

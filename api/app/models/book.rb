@@ -19,4 +19,6 @@
 class Book < ApplicationRecord
   has_many :reviews, dependent: :delete_all
   has_many :users, through: :reviews
+  has_many :book_shelves, dependent: :delete_all
+  has_many :users, through: :book_shelves
 end

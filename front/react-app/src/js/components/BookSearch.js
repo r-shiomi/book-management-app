@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 const BookSearch = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [state, setState] = useState({ keyword: '', page: 1 });
+  const [state, setState] = useState({ keyword: JSON.parse(localStorage.getItem('keyword')) || '', page: JSON.parse(localStorage.getItem('page')) });
   const [errorText, setErrorText] = useState("");
   const books = useSelector(state => state.booksReducer.books);
   const fetched = useSelector(state => state.booksReducer.fetched);
@@ -67,9 +67,10 @@ const BookSearch = () => {
   const handleSubmit = e => {
     e.preventDefault();
 
+    localStorage.setItem('keyword', JSON.stringify(state.keyword));
     if (state.keyword) {
       setErrorText("");
-      dispatch(search(state));
+      dispatch(search(state.keyword,state.page));
       setState({ ...state, page: 1 });
     } else {
       setErrorText("キーワードを入力してください。");
@@ -86,7 +87,8 @@ const BookSearch = () => {
     if (isFirstRender.current) { // 初回レンダー判定
       isFirstRender.current = false;
     } else {
-      dispatch(search(state));
+      localStorage.setItem('page', JSON.stringify(state.page));
+      dispatch(search(JSON.parse(localStorage.getItem('keyword')), state.page));
     }
   }, [state.page]);
 
@@ -108,6 +110,7 @@ const BookSearch = () => {
       <form onSubmit={handleSubmit} noValidate className={classes.form}>
         <TextField
           name="keyword"
+          defaultValue={state.keyword}
           variant="outlined"
           size="small"
           fullWidth
@@ -133,7 +136,7 @@ const BookSearch = () => {
             検索結果
           </Typography>
           <List className={classes.list} >
-            {books.Items.map((book,idx) =>
+            {books.Items.map((book, idx) =>
               <Paper key={idx}>
                 <ListItem alignItems="flex-start">
                   <Link to={`/book/${book.id}`} component={RouteLink}>
