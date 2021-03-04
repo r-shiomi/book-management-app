@@ -14,7 +14,7 @@ import Alert from '@material-ui/lab/Alert';
 import Pagination from '@material-ui/lab/Pagination';
 import { React, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { Link as RouteLink, useParams } from 'react-router-dom';
+import { Link as RouteLink, useHistory, useLocation, useParams } from 'react-router-dom';
 import { search } from "../actions/booksActions";
 import Paper from '@material-ui/core/Paper';
 
@@ -149,7 +149,6 @@ const BookSearch = () => {
                       <Typography
                         component="span"
                         variant="body2"
-                        className={classes.inline}
                         color="textPrimary"
                       >
                         {book.author} / {book.salesDate}

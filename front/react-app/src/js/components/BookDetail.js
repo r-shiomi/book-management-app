@@ -153,15 +153,15 @@ const BookDetail = () => {
     setAnchorEl(null);
   };
 
-  const handleClickBookShelfItem = e => {
+  const handleBookShelfMenuClick = (e) => {
     e.preventDefault();
 
+    const { myValue } = e.currentTarget.dataset
     //対象の本が既に本棚に登録されているか否かによって登録/更新・削除処理を分ける
     if (book.bookShelfStatus !== undefined) {
-      console.log(e.target.value);
-      dispatch(changeBookShelfStatus(book, Number(e.target.value), state))
+      dispatch(changeBookShelfStatus(book, myValue, state))
     } else {
-      dispatch(registerBook(state, Number(e.target.value)));
+      dispatch(registerBook(state, myValue));
     }
 
     handleBookShelfClose();
@@ -234,29 +234,29 @@ const BookDetail = () => {
                   open={Boolean(anchorEl)}
                   onClose={handleBookShelfClose}
                 >
-                  <MenuItem value="0" onClick={(e) => handleClickBookShelfItem(e)}>
-                    {book.bookShelfStatus == 0 &&
+                  <MenuItem data-my-value="want_to_read"  onClick={handleBookShelfMenuClick} >
+                    {book.bookShelfStatus == 'want_to_read' &&
                       <ListItemIcon className={classes.listItemIcon}>
                       <CheckIcon className={ classes.checkIcon}/>
                       </ListItemIcon>}
                       読みたい本
                   </MenuItem>
-                  <MenuItem value="1" onClick={(e) => handleClickBookShelfItem(e)}>
-                    {book.bookShelfStatus == 1 &&
+                  <MenuItem data-my-value="reading" onClick={handleBookShelfMenuClick} >
+                    {book.bookShelfStatus == 'reading' &&
                       <ListItemIcon className={classes.listItemIcon}>
                         <CheckIcon />
                       </ListItemIcon>}
                     読んでる本
                   </MenuItem>
-                  <MenuItem value="2" onClick={(e) => handleClickBookShelfItem(e)}>
-                    {book.bookShelfStatus == 2 &&
+                  <MenuItem data-my-value="finished_reading" onClick={handleBookShelfMenuClick}>
+                    {book.bookShelfStatus == 'finished_reading' &&
                       <ListItemIcon className={classes.listItemIcon}>
                         <CheckIcon />
                       </ListItemIcon>}
                       読み終わった本
                   </MenuItem>
-                  <MenuItem value="3" onClick={(e) => handleClickBookShelfItem(e)}>
-                    {book.bookShelfStatus == 3 &&
+                  <MenuItem data-my-value="tsundoku" onClick={handleBookShelfMenuClick}>
+                    {book.bookShelfStatus == 'tsundoku' &&
                       <ListItemIcon className={classes.listItemIcon}>
                         <CheckIcon />
                       </ListItemIcon>}
@@ -276,10 +276,10 @@ const BookDetail = () => {
                   open={Boolean(anchorEl)}
                   onClose={handleBookShelfClose}
                 >
-                  <MenuItem value="0" onClick={(e) => handleClickBookShelfItem(e)}>読みたい本</MenuItem>
-                  <MenuItem value="1" onClick={(e) => handleClickBookShelfItem(e)}>読んでる本</MenuItem>
-                  <MenuItem value="2" onClick={(e) => handleClickBookShelfItem(e)}>読み終わった本</MenuItem>
-                  <MenuItem value="3" onClick={(e) => handleClickBookShelfItem(e)}>積読本</MenuItem>
+                  <MenuItem data-my-value="want_to_read" onClick={handleBookShelfMenuClick}>読みたい本</MenuItem>
+                  <MenuItem data-my-value="reading" onClick={handleBookShelfMenuClick}>読んでる本</MenuItem>
+                  <MenuItem data-my-value="finished_reading" onClick={handleBookShelfMenuClick}>読み終わった本</MenuItem>
+                  <MenuItem data-my-value="tsundoku" onClick={handleBookShelfMenuClick}>積読本</MenuItem>
                 </Menu>
               </div>
             }
@@ -361,7 +361,7 @@ const BookDetail = () => {
       {book.reviews !== undefined &&
         <Pagination
           className={classes.pagenationRoot}
-          count={book.maxPage}
+          count={book.totalPage}
           color="primary"
           shape="rounded"
           onChange={(e, page) => setState({ ...state, reviewPage: page })}

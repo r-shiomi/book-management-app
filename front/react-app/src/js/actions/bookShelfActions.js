@@ -9,6 +9,9 @@ export const UPDATE_BOOK_SHELF_STATUS_SUCCESS = 'UPDATE_BOOK_SHELF_STATUS_SUCCES
 export const DELETE_BOOK_SHELF_STATUS_STARTED = 'DELETE_BOOK_SHELF_STATUS_STARTED'
 export const DELETE_BOOK_SHELF_STATUS_FAILURE = 'DELETE_BOOK_SHELF_STATUS_FAILURE'
 export const DELETE_BOOK_SHELF_STATUS_SUCCESS = 'DELETE_BOOK_SHELF_STATUS_SUCCESS'
+export const FIND_BOOKS_BY_STATUS_STARTED = 'FIND_BOOKS_BY_STATUS_STARTED'
+export const FIND_BOOKS_BY_STATUS_FAILURE = 'FIND_BOOKS_BY_STATUS_FAILURE'
+export const FIND_BOOKS_BY_STATUS_SUCCESS = 'FIND_BOOKS_BY_STATUS_SUCCESS'
 
 export const registerBook = (state, status) => {
   return dispatch => {
@@ -63,5 +66,27 @@ export const changeBookShelfStatus = (book, status, state) => {
         });
     }
 
+  }
+}
+
+export const findBooksByStatus = (status,page) => {
+  return dispatch => {
+    console.log(status);
+    console.log(page);
+    dispatch({ type: FIND_BOOKS_BY_STATUS_STARTED });
+    axios.get("http://localhost:3000/api/v1/book_shelves/",{
+      params: {
+        'status': status,
+        'page': page,
+      }
+    })
+      .then(res => {
+        console.log(res);
+        dispatch({ type: FIND_BOOKS_BY_STATUS_SUCCESS, payload: res.data.data });
+      })
+      .catch(err => {
+        console.log(err.response);
+        dispatch({ type: FIND_BOOKS_BY_STATUS_FAILURE, payload: err });
+      });
   }
 }

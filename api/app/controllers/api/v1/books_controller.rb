@@ -9,9 +9,9 @@ module Api
       def show
         review_page = params[:reviewPage].to_i
         hits = 10 #1ページあたりの取得件数
-        book = book_to_json(@book)
+        book = @book.parse_json
         start_index = (review_page - 1) * hits
-        book["maxPage"] = (book[:reviews].length / 10.to_f).ceil
+        book["totalPage"] = (book[:reviews].length / 10.to_f).ceil
         book[:reviews] = book[:reviews].slice(start_index, hits)
         #対象の本が本棚に登録されている時、そのステータスを返す
         if book_shelf = BookShelf.find_by(book_id: book[:id], user_id: current_user.id)
@@ -52,7 +52,7 @@ module Api
           end
 
           #レスポンス用にjson化
-          resBooks << book_to_json(book)
+          resBooks << book.parse_json
         end
 
         resData = { "totalPageCount": JSON.parse(rakuten_res.body)["pageCount"] }
@@ -76,39 +76,6 @@ module Api
           "item_url": item["itemUrl"],
           "page_count": get_page_count(item["isbn"]),
         }
-      end
-
-      def book_to_json(data)
-        {
-          "id": data.id,
-          "title": data.title,
-          "author": data.author,
-          "publisherName": data.publisher_name,
-          "salesDate": data.sales_date,
-          "itemCaption": data.item_caption,
-          "isbn": data.isbn,
-          "largeImageUrl": data.large_image_url,
-          "mediumImageUrl": data.medium_image_url,
-          "itemUrl": data.item_url,
-          "pageCount": data.page_count,
-          "reviews": reviews_to_json(data.reviews),
-        }
-      end
-
-      def reviews_to_json(reviews)
-        res = []
-        reviews.each do |review|
-          res <<
-            {
-              "id": review.id,
-              "content": review.content,
-              "createdAt": review.created_at.strftime("%Y-%m-%d %H:%M"),
-              "updatedAt": review.updated_at.strftime("%Y-%m-%d %H:%M"),
-              "userId": review.user.id,
-              "userName": review.user.name,
-            }
-        end
-        return res
       end
 
       #OpenbdApiからページ数を取得する

@@ -8,9 +8,13 @@ import {
   DELETE_BOOK_SHELF_STATUS_STARTED,
   DELETE_BOOK_SHELF_STATUS_FAILURE,
   DELETE_BOOK_SHELF_STATUS_SUCCESS,
+  FIND_BOOKS_BY_STATUS_STARTED,
+  FIND_BOOKS_BY_STATUS_FAILURE,
+  FIND_BOOKS_BY_STATUS_SUCCESS,
 } from '../actions/bookShelfActions';
 
 const initialState = {
+  data: {totalPage:1, books:[]},
   fetching: false,
   fetched: false,
   error: null,
@@ -46,6 +50,16 @@ const bookShelfReducer = (state = initialState, action) => {
     }
     case DELETE_BOOK_SHELF_STATUS_SUCCESS: {
       return { ...state, fetching: false, fetched: true };
+    }
+      
+    case FIND_BOOKS_BY_STATUS_STARTED: {
+      return { ...state, fetching: true };
+    }
+    case FIND_BOOKS_BY_STATUS_FAILURE: {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case FIND_BOOKS_BY_STATUS_SUCCESS: {
+      return { ...state, fetching: false, fetched: true, data: action.payload };
     }
 
   }
