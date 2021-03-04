@@ -26,6 +26,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link as RouteLink, useParams } from 'react-router-dom';
 import { getBook } from "../actions/bookActions";
 import { createReview } from "../actions/reviewActions";
+import { registerBook, changeBookShelfStatus } from "../actions/bookShelfActions";
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import CheckIcon from '@material-ui/icons/Check';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,7 +65,14 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: 'pre-wrap',
     display: 'flex'
   },
-  buttonGroup: {
+  buttonRoot: {
+    display: 'flex',
+  },
+  rakutenButton: {
+    marginRight: theme.spacing(1),
+    overflow: 'auto',
+  },
+  reviewButton: {
     marginRight: theme.spacing(1),
     overflow: 'auto',
   },
@@ -75,7 +86,20 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     display: 'flex',
     marginTop: theme.spacing(2),
-  }
+  },
+  bookShelfButton: {
+    marginRight: theme.spacing(1),
+    overflow: 'auto',
+  },
+  bookShelfCheckedButton: {
+    marginRight: theme.spacing(1),
+    overflow: 'auto',
+    color: '#ef6c00',
+    borderColor: '#ef6c00',
+  },
+  listItemIcon: {
+    marginRight: theme.spacing(-3),
+  },
 }));
 
 const BookDetail = () => {
@@ -111,14 +135,6 @@ const BookDetail = () => {
     setOpen(false);
   };
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
@@ -127,6 +143,28 @@ const BookDetail = () => {
     e.preventDefault();
     dispatch(createReview(state, setReviewAlertOpen));
     handleDialogClose();
+  };
+
+  const handleBookShelfClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleBookShelfClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleBookShelfMenuClick = (e) => {
+    e.preventDefault();
+
+    const { myValue } = e.currentTarget.dataset
+    //対象の本が既に本棚に登録されているか否かによって登録/更新・削除処理を分ける
+    if (book.bookShelfStatus !== undefined) {
+      dispatch(changeBookShelfStatus(book, myValue, state))
+    } else {
+      dispatch(registerBook(state, myValue));
+    }
+
+    handleBookShelfClose();
   };
 
   //テキストの行数が設定行数より高いか判定
@@ -156,7 +194,7 @@ const BookDetail = () => {
       dispatch(getBook(state));
     }
   }, [state.reviewPage]);
-
+  
   return (
     <Container className={classes.root}>
       <Paper className={classes.paper}>
@@ -180,25 +218,72 @@ const BookDetail = () => {
           <Typography variant="caption" gutterBottom>
             {book.itemCaption}
           </Typography>
-          <div>
-            <Button target="_blank" variant="outlined" color="primary" href={book.itemUrl} className={classes.buttonGroup}>
+          <div className={classes.buttonRoot}>
+            <Button target="_blank" variant="outlined" color="primary" href={book.itemUrl} className={classes.rakutenButton}>
               楽天購入ページへ
-          </Button>
-            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} variant="outlined" color="secondary" startIcon={<AddCircleIcon />} className={classes.buttonGroup}>
-              本棚に登録
+            </Button>
+            {book.bookShelfStatus !== undefined ?
+              <div>
+                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleBookShelfClick} variant="outlined" startIcon={<CheckCircleIcon />} className={classes.bookShelfCheckedButton}>
+                  本棚に登録済み
               </Button>
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem to="/book-shelf">読みたい本</MenuItem>
-              <MenuItem onClick={handleClose}>読んでる本</MenuItem>
-              <MenuItem to="/book-shelf" component={RouteLink}>読み終わった本</MenuItem>
-              <MenuItem onClick={handleClose}>積読本</MenuItem>
-            </Menu>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleBookShelfClose}
+                >
+                  <MenuItem data-my-value="want_to_read"  onClick={handleBookShelfMenuClick} >
+                    {book.bookShelfStatus == 'want_to_read' &&
+                      <ListItemIcon className={classes.listItemIcon}>
+                      <CheckIcon className={ classes.checkIcon}/>
+                      </ListItemIcon>}
+                      読みたい本
+                  </MenuItem>
+                  <MenuItem data-my-value="reading" onClick={handleBookShelfMenuClick} >
+                    {book.bookShelfStatus == 'reading' &&
+                      <ListItemIcon className={classes.listItemIcon}>
+                        <CheckIcon />
+                      </ListItemIcon>}
+                    読んでる本
+                  </MenuItem>
+                  <MenuItem data-my-value="finished_reading" onClick={handleBookShelfMenuClick}>
+                    {book.bookShelfStatus == 'finished_reading' &&
+                      <ListItemIcon className={classes.listItemIcon}>
+                        <CheckIcon />
+                      </ListItemIcon>}
+                      読み終わった本
+                  </MenuItem>
+                  <MenuItem data-my-value="tsundoku" onClick={handleBookShelfMenuClick}>
+                    {book.bookShelfStatus == 'tsundoku' &&
+                      <ListItemIcon className={classes.listItemIcon}>
+                        <CheckIcon />
+                      </ListItemIcon>}
+                      積読本
+                  </MenuItem>
+                </Menu>
+              </div>
+              :
+              <div>
+                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleBookShelfClick} variant="outlined" color="secondary" startIcon={<AddCircleIcon />} className={classes.bookShelfButton}>
+                  本棚に登録
+              </Button>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleBookShelfClose}
+                >
+                  <MenuItem data-my-value="want_to_read" onClick={handleBookShelfMenuClick}>読みたい本</MenuItem>
+                  <MenuItem data-my-value="reading" onClick={handleBookShelfMenuClick}>読んでる本</MenuItem>
+                  <MenuItem data-my-value="finished_reading" onClick={handleBookShelfMenuClick}>読み終わった本</MenuItem>
+                  <MenuItem data-my-value="tsundoku" onClick={handleBookShelfMenuClick}>積読本</MenuItem>
+                </Menu>
+              </div>
+            }
+
 
             <Snackbar open={reviewAlertOpen} autoHideDuration={6000} onClose={reviewAlertClose}>
               <Alert elevation={6} variant="filled" onClose={reviewAlertClose} severity="success">
@@ -206,7 +291,7 @@ const BookDetail = () => {
               </Alert>
             </Snackbar>
 
-            <Button variant="outlined" color="default" startIcon={<RateReviewIcon />} onClick={handleDialogOpen} className={classes.buttonGroup}>
+            <Button variant="outlined" color="default" startIcon={<RateReviewIcon />} onClick={handleDialogOpen} className={classes.reviewButton}>
               レビューを書く
             </Button>
             <Dialog open={open} onClose={handleDialogClose} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>
@@ -276,7 +361,7 @@ const BookDetail = () => {
       {book.reviews !== undefined &&
         <Pagination
           className={classes.pagenationRoot}
-          count={book.maxPage}
+          count={book.totalPage}
           color="primary"
           shape="rounded"
           onChange={(e, page) => setState({ ...state, reviewPage: page })}

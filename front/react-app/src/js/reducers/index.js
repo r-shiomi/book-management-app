@@ -3,6 +3,7 @@ import userReducer from "./userReducer";
 import booksReducer from "./booksReducer";
 import bookReducer from "./bookReducer";
 import reviewReducer from "./reviewReducer";
+import bookShelfReducer from "./bookShelfReducer";
 
 
 export default combineReducers({
@@ -10,4 +11,5 @@ export default combineReducers({
   booksReducer,
   bookReducer,
   reviewReducer,
+  bookShelfReducer,
 })

@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :books
       get '/search', to: 'books#search'
       resources :reviews
+      resources :book_shelves
     end
   end
 

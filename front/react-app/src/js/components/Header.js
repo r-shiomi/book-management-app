@@ -45,9 +45,10 @@ function a11yProps(index) {
 
 const Header = () => {
   const classes = useStyles();
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(JSON.parse(localStorage.getItem('headerPage')) || 0);
 
   const handleChange = (event, newValue) => {
+    localStorage.setItem('headerPage', JSON.stringify(newValue));
     setValue(newValue);
   };
 

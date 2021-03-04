@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_25_113741) do
+ActiveRecord::Schema.define(version: 2021_02_28_132055) do
+
+  create_table "book_shelves", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "book_id", null: false
+    t.integer "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["book_id"], name: "index_book_shelves_on_book_id"
+    t.index ["user_id"], name: "index_book_shelves_on_user_id"
+  end
 
   create_table "books", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
@@ -67,6 +77,8 @@ ActiveRecord::Schema.define(version: 2021_02_25_113741) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "book_shelves", "books"
+  add_foreign_key "book_shelves", "users"
   add_foreign_key "reviews", "books"
   add_foreign_key "reviews", "users"
 end
