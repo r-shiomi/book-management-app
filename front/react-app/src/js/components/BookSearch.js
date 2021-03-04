@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 const BookSearch = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [state, setState] = useState({ keyword: JSON.parse(localStorage.getItem('keyword')) || '', page: JSON.parse(localStorage.getItem('page')) });
+  const [state, setState] = useState({ keyword: JSON.parse(localStorage.getItem('keyword')) || '', page: JSON.parse(localStorage.getItem('page')) || 1 });
   const [errorText, setErrorText] = useState("");
   const books = useSelector(state => state.booksReducer.books);
   const fetched = useSelector(state => state.booksReducer.fetched);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
@@ -35,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
   },
   listItemText: {
     marginLeft: theme.spacing(3),
+    wordWrap: 'break-word',
+    width: '50%'
   },
   img: {
     width: '90px',
@@ -57,23 +59,20 @@ function a11yProps(index) {
 const BookShelf = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [value, setValue] = useState('want_to_read');
+  const [value, setValue] = useState(JSON.parse(localStorage.getItem('bookShelfStatus')) || 'want_to_read');
   const data = useSelector(state => state.bookShelfReducer.data);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(JSON.parse(localStorage.getItem('bookShelfPage')) || 1);
 
   const handleBookShelfTabsChange = (event, newValue) => {
     setValue(newValue);
-    console.log(page);
-    dispatch(findBooksByStatus(newValue,page));
+    setPage(1);
+    dispatch(findBooksByStatus(newValue, 1));
   };
 
   useEffect(() => {
-    console.log(value);
-    console.log(page);
-    // console.log(data.books.length);
-    // console.log(data.books.length / 10);
-    // console.log(Math.ceil(data.books.length / 10));
-    dispatch(findBooksByStatus(value,page));
+    localStorage.setItem('bookShelfStatus', JSON.stringify(value));
+    localStorage.setItem('bookShelfPage', JSON.stringify(page));
+    dispatch(findBooksByStatus(value, page));
   }, [page])
 
   return (
@@ -87,10 +86,10 @@ const BookShelf = () => {
           <Tab value="finished_reading" label="読み終わった本" className={classes.tab} />
           <Tab value="tsundoku" label="積読本" className={classes.tab} />
         </Tabs>
-        {(data !== undefined && data.books !== undefined) &&
-          data.books.map((book, idx) => 
-            <Paper key={idx}>
-              <ListItem alignItems="flex-start">
+        {(data.books !== undefined) &&
+          data.books.map((book, idx) =>
+            <Paper key={idx} className={classes.paper}>
+              <ListItem alignItems="flex-start" className={classes.listItem}>
                 <Link to={`/book/${book.id}`} component={RouteLink}>
                   <img className={classes.img} src={book.mediumImageUrl} />
                 </Link>
@@ -101,25 +100,30 @@ const BookShelf = () => {
                     <Typography
                       component="span"
                       variant="body2"
-                      className={classes.inline}
                       color="textPrimary"
                     >
                       {book.author} / {book.salesDate}
                     </Typography>
                   }
                 />
+                <Typography
+                  component="span"
+                  variant="body2"
+                  color="secondary">
+                  追加日：{book.bookShelfAddedDate}
+                </Typography>
               </ListItem>
               <Divider />
             </Paper>
           )}
       </Paper>
-      {data.books !== undefined &&
+      {(data.books !== undefined && data.books.length !== 0) &&
         <Pagination
           className={classes.pagenationRoot}
           count={data.totalPage}
           color="primary"
           shape="rounded"
-          onChange={(e,page) => setPage(page)}
+          onChange={(e, page) => setPage(page)}
           page={page}
         />}
     </Container>

@@ -9,15 +9,14 @@ module Api
         data = {}
         books = []
         book_shelves.where(status: params[:status]).each do |book_shelf|
-          books << book_shelf.book.parse_json
+          books << book_shelf.book.parse_json        
+          books.last["bookShelfAddedDate"] = book_shelf.updated_at.strftime("%Y-%m-%d %H:%M")
         end
         data["totalPage"] = (books.length / 10.to_f).ceil
-        puts "aaaa"
         hits = 10 #1ページあたりの取得件数
         start_index = (page - 1) * hits
         books = books.slice(start_index,hits)
         data["books"] = books
-        
 
         render json: { status: "SUCCESS", data: data }
       end
