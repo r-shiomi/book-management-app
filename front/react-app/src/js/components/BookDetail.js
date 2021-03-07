@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexWrap: 'wrap',
     flexDirection: 'column',
-    width: '50%',
   },
   paper: {
     padding: theme.spacing(2),
@@ -196,7 +195,7 @@ const BookDetail = () => {
   }, [state.reviewPage]);
   
   return (
-    <Container className={classes.root}>
+    <Container maxWidth="md" className={classes.root}>
       <Paper className={classes.paper}>
         <img src={book.largeImageUrl} className={classes.bookImg} />
         <div className={classes.bookDetail}>
