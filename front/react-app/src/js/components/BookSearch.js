@@ -14,7 +14,7 @@ import Alert from '@material-ui/lab/Alert';
 import Pagination from '@material-ui/lab/Pagination';
 import { React, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { Link as RouteLink, useHistory, useLocation, useParams } from 'react-router-dom';
+import { Link as RouteLink, Redirect, Router, useHistory, useLocation, useParams } from 'react-router-dom';
 import { search } from "../actions/booksActions";
 import Paper from '@material-ui/core/Paper';
 
@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 const BookSearch = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [state, setState] = useState({ keyword: JSON.parse(localStorage.getItem('keyword')) || '', page: JSON.parse(localStorage.getItem('page')) || 1 });
+  const [state, setState] = useState({ keyword: JSON.parse(localStorage.getItem('keyword')) || '', page: JSON.parse(localStorage.getItem('page')) || 1});
   const [errorText, setErrorText] = useState("");
   const books = useSelector(state => state.booksReducer.books);
   const fetched = useSelector(state => state.booksReducer.fetched);
@@ -70,7 +70,7 @@ const BookSearch = () => {
     localStorage.setItem('keyword', JSON.stringify(state.keyword));
     if (state.keyword) {
       setErrorText("");
-      dispatch(search(state.keyword,state.page));
+      dispatch(search(state.keyword, state.page));
       setState({ ...state, page: 1 });
     } else {
       setErrorText("キーワードを入力してください。");
@@ -91,6 +91,7 @@ const BookSearch = () => {
       dispatch(search(JSON.parse(localStorage.getItem('keyword')), state.page));
     }
   }, [state.page]);
+
 
   useEffect(() => {
     if (fetched) {
@@ -165,7 +166,7 @@ const BookSearch = () => {
               count={books.totalPageCount >= 10 ? 10 : books.totalPageCount}
               color="primary"
               shape="rounded"
-              onChange={(e, page) => setState({ ...state, page: page })}
+              onChange={(e, page) => setState({...state, page:page})}
               page={state.page}
             />
           </div>
