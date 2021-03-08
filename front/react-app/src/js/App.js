@@ -13,6 +13,7 @@ import GuestRoute from './components/auth/GuestRoute';
 import BookSearch from './components/BookSearch';
 import BookDetail from './components/BookDetail';
 import BookShelf from './components/BookShelf';
+import BookReview from './components/BookReview';
 
 const theme = createMuiTheme({
   palette: {
@@ -51,6 +52,7 @@ const App = () => {
             <Route exact path='/book-search' component={BookSearch} />
             <Route exact path='/book/:bookId' component={BookDetail} />
             <Route exact path='/book-shelf' component={BookShelf} />
+            <Route exact path='/book-review' component={BookReview} />
             {/* <UserRoute>
               </UserRoute> */}
             <GuestRoute>

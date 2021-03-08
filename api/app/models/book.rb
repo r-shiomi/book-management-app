@@ -39,6 +39,19 @@ class Book < ApplicationRecord
     }
   end
 
+  def parse_json_for_review
+    {
+      "bookId": id,
+      "bookTitle": title,
+      "bookAuthor": author,
+      "bookPublisherName": publisher_name,
+      "bookSalesDate": sales_date,
+      "bookItemCaption": item_caption,
+      "bookLargeImageUrl": large_image_url,
+      "bookMediumImageUrl": medium_image_url,
+    }
+  end
+
   private 
 
   def reviews_to_json(reviews)

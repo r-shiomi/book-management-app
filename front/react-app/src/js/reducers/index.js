@@ -4,6 +4,7 @@ import booksReducer from "./booksReducer";
 import bookReducer from "./bookReducer";
 import reviewReducer from "./reviewReducer";
 import bookShelfReducer from "./bookShelfReducer";
+import bookReviewReducer from "./bookReviewReducer";
 
 
 export default combineReducers({
@@ -12,4 +13,5 @@ export default combineReducers({
   bookReducer,
   reviewReducer,
   bookShelfReducer,
+  bookReviewReducer,
 })
