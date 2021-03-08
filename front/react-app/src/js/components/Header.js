@@ -12,6 +12,7 @@ import HeaderMenu from './HeaderMenu';
 import HomeIcon from '@material-ui/icons/Home';
 import { Link as RouteLink } from 'react-router-dom';
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
+import RateReviewIcon from '@material-ui/icons/RateReview';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -66,7 +67,7 @@ const Header = () => {
           <Tab to="/" component={RouteLink} label={<div><HomeIcon style={{ verticalAlign: 'middle' }} /> トップ </div>} {...a11yProps(0)} className={classes.tab} />
           <Tab to="/book-search" component={RouteLink} label={<div><SearchIcon style={{ verticalAlign: 'middle' }} /> 書籍検索 </div>} {...a11yProps(1)} className={classes.tab} />
           <Tab to="/book-shelf" component={RouteLink} label={<div><LocalLibraryIcon style={{ verticalAlign: 'middle' }} /> 本棚 </div>} {...a11yProps(2)} className={classes.tab} />
-          <Tab label="Item Three" {...a11yProps(3)} className={classes.tab} />
+          <Tab to="/book-review" component={RouteLink} label={<div><RateReviewIcon style={{ verticalAlign: 'middle' }} /> 書評・レビュー </div>} {...a11yProps(3)} className={classes.tab} />
         </Tabs>
       </Toolbar>
     </AppBar>

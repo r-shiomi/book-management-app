@@ -193,7 +193,7 @@ const BookDetail = () => {
       dispatch(getBook(state));
     }
   }, [state.reviewPage]);
-  
+
   return (
     <Container maxWidth="md" className={classes.root}>
       <Paper className={classes.paper}>
@@ -233,10 +233,10 @@ const BookDetail = () => {
                   open={Boolean(anchorEl)}
                   onClose={handleBookShelfClose}
                 >
-                  <MenuItem data-my-value="want_to_read"  onClick={handleBookShelfMenuClick} >
+                  <MenuItem data-my-value="want_to_read" onClick={handleBookShelfMenuClick} >
                     {book.bookShelfStatus == 'want_to_read' &&
                       <ListItemIcon className={classes.listItemIcon}>
-                      <CheckIcon className={ classes.checkIcon}/>
+                        <CheckIcon className={classes.checkIcon} />
                       </ListItemIcon>}
                       読みたい本
                   </MenuItem>
@@ -333,11 +333,18 @@ const BookDetail = () => {
             <Typography variant="body1" color="secondary" gutterBottom>
               {review.userName}さんのレビュー
             </Typography>
-            <Collapse in={checked[idx] || false} collapsedHeight={320}>
-              <Typography variant="h6" gutterBottom>
-                {review.content}
-              </Typography>
-            </Collapse>
+            {
+              isHighThanMaxTextHeight(review.content) ?
+                <Collapse in={checked[idx] || false} collapsedHeight={320}>
+                  <Typography variant="h6" gutterBottom>
+                    {review.content}
+                  </Typography>
+                </Collapse>
+                :
+                <Typography variant="h6" gutterBottom>
+                  {review.content}
+                </Typography>
+            }
             {
               isHighThanMaxTextHeight(review.content) &&
               <Link component="button" className={classes.openTextLink}>
