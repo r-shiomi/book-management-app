@@ -11,6 +11,9 @@ import {
   FIND_REVIEWS_BY_STATUS_STARTED,
   FIND_REVIEWS_BY_STATUS_FAILURE,
   FIND_REVIEWS_BY_STATUS_SUCCESS,
+  FIND_NEW_REVIEWS_STARTED,
+  FIND_NEW_REVIEWS_FAILURE,
+  FIND_NEW_REVIEWS_SUCCESS,
 } from '../actions/bookReviewActions';
 
 const initialState = {
@@ -59,6 +62,16 @@ const bookReviewReducer = (state = initialState, action) => {
       return { ...state, fetching: false, error: action.payload };
     }
     case FIND_REVIEWS_BY_STATUS_SUCCESS: {
+      return { ...state, fetching: false, fetched: true, data: action.payload };
+    }
+      
+    case FIND_NEW_REVIEWS_STARTED: {
+      return { ...state, fetching: true };
+    }
+    case FIND_NEW_REVIEWS_FAILURE: {
+      return { ...state, fetching: false, error: action.payload };
+    }
+    case FIND_NEW_REVIEWS_SUCCESS: {
       return { ...state, fetching: false, fetched: true, data: action.payload };
     }
 

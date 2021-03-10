@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import { Link as RouteLink, useParams } from 'react-router-dom';
+import { Link as RouteLink, useParams,Prompt, useLocation } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
@@ -71,8 +71,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     display: 'flex'
   },
-  card: {
-    backgroundColor: "#eeeeee",
+  reviewText: {
+    padding: theme.spacing(1),
   },
   openTextLink: {
     marginLeft: 'auto',
@@ -83,13 +83,6 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
 const BookReview = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -97,6 +90,7 @@ const BookReview = () => {
   const data = useSelector(state => state.bookReviewReducer.data);
   const [page, setPage] = useState(JSON.parse(localStorage.getItem('bookReviewPage')) || 1);
   const [checked, setChecked] = useState({});
+ 
 
   const handleBookReviewTabsChange = (event, newValue) => {
     setValue(newValue);
@@ -124,8 +118,9 @@ const BookReview = () => {
     localStorage.setItem('bookReviewStatus', JSON.stringify(value));
     localStorage.setItem('bookReviewPage', JSON.stringify(page));
     dispatch(findReviewsByStatus(value, page));
-  }, [page])
 
+  }, [page])
+  
   return (
     <Container maxWidth="md" className={classes.root}>
       <Paper>
@@ -163,7 +158,7 @@ const BookReview = () => {
                       variant="body2"
                       color="secondary"
                     >
-                      レビュー日：{review.wroteDate}
+                      レビュー日：{review.reviewDate}
                     </Typography>
                   </div>
                   <div className={classes.review}>
@@ -185,7 +180,7 @@ const BookReview = () => {
                               variant="body2"
                               component="p"
                               color="textPrimary"
-                              className={classes.reviewPaper}
+                              className={classes.reviewText}
                             >
                               {review.content}
                             </Typography>
@@ -195,7 +190,7 @@ const BookReview = () => {
                             variant="body2"
                             component="p"
                             color="textPrimary"
-                            className={classes.reviewPaper}
+                            className={classes.reviewText}
                           >
                             {review.content}
                           </Typography>

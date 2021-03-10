@@ -5,7 +5,7 @@ module Api
 
       def index
         page = params[:page].to_i
-        book_shelves = User.find(current_user.id).book_shelves.eager_load(:book)
+        book_shelves = User.find(current_user.id).book_shelves.order(updated_at: :DESC).eager_load(:book)
         data = {}
         books = []
         book_shelves.where(status: params[:status]).each do |book_shelf|

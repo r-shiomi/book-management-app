@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,108 +12,151 @@ import TextField from '@material-ui/core/TextField';
 import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchIcon from '@material-ui/icons/Search';
+import { findNewReviews } from "../actions/bookReviewActions";
+import { useDispatch, useSelector } from "react-redux";
+import Divider from '@material-ui/core/Divider';
+import Pagination from '@material-ui/lab/Pagination';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Link from '@material-ui/core/Link';
+import { Link as RouteLink, useParams } from 'react-router-dom';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles((theme) => ({
-  heroContent: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
-  },
-  heroButtons: {
-    marginTop: theme.spacing(4),
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
   card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    maxWidth: 345,
   },
   cardMedia: {
-    paddingTop: '56.25%', // 16:9
+    objectFit: 'contain',
+    height: '200px',
+    backgroundColor: '#bdbdbd'
   },
-  cardContent: {
-    flexGrow: 1,
+  reviewUser: {
+    marginTop: theme.spacing(2)
+  },
+  reviewContent: {
+    padding: theme.spacing(),
+    whiteSpace: 'pre-wrap',
+    backgroundColor: "#eeeeee",
+    flexDirection: 'column',
+    display: 'flex',
+    wordBreak: 'break-all',
+  },
+  reviewText: {
+    padding: theme.spacing(1),
+  },
+  openTextLink: {
+    marginLeft: 'auto',
+  },
+  openTextButton: {
+    display: 'flex',
   },
 }));
 
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
 const Home = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const data = useSelector(state => state.bookReviewReducer.data);
+  const [checked, setChecked] = useState({});
+
+  //テキストの行数が設定行数より高いか判定
+  const isHighThanMaxTextHeight = (text) => {
+    const maxHeight = 10;
+    const textHeight = text.split("\n").length;
+    if (textHeight > maxHeight) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //続きを読むをクリックされた時のテキスト表示変更処理
+  const handleReviewContentChange = (idx) => {
+    setChecked({ ...checked, [idx]: !checked[idx] });
+  };
+
+  useEffect(() => {
+    dispatch(findNewReviews());
+  }, [])
 
   return (
     <React.Fragment>
-      {/* Hero unit */}
-      < div className={classes.heroContent} >
-        <Container maxWidth="sm">
-          <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-            書籍検索
-              </Typography>
-              <TextField
-                name="keyword"
-                variant="outlined"
-                fullWidth
-                id="keyword"
-                label="本のタイトル、著者名"
-                autoFocus
-            InputProps={{
-              endAdornment: (
-                <InputAdornment>
-                  <IconButton>
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-              />
-          <div className={classes.heroButtons}>
-            <Grid container spacing={2} justify="center">
-              <Grid item>
-                <Button variant="contained" color="primary">
-                  Main call to action
-                    </Button>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined" color="primary">
-                  Secondary action
-                    </Button>
-              </Grid>
-            </Grid>
-          </div>
-        </Container>
-      </div >
-      <Container className={classes.cardGrid} maxWidth="md">
-        {/* End hero unit */}
+      <Container maxWidth="md">
+        <Typography component="h1" variant="h2" color="textSecondary" gutterBottom>
+          新着レビュー
+        </Typography>
         <Grid container spacing={4}>
-          {cards.map((card) => (
-            <Grid item key={card} xs={12} sm={6} md={4}>
-              <Card className={classes.card}>
-                <CardMedia
-                  className={classes.cardMedia}
-                  image="https://source.unsplash.com/random"
-                  title="Image title"
-                />
-                <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="h5" component="h2">
-                    Heading
+          {(data.reviews !== undefined) &&
+            data.reviews.map((review, idx) =>
+              <Grid item key={idx} xs={12} sm={6} md={4}>
+                <Card className={classes.card}>
+                  <Link to={`/book/${review.bookId}`} component={RouteLink}>
+                    <CardMedia
+                      component="img"
+                      alt="Contemplative Reptile"
+                      // height="140"
+                      className={classes.cardMedia}
+                      image={review.bookLargeImageUrl}
+                      title="Contemplative Reptile"
+                    />
+                  </Link>
+                  <CardContent>
+                    <Link to={`/book/${review.bookId}`} component={RouteLink}>
+                      <Typography variant="subtitle2" >
+                        {review.bookTitle}
                       </Typography>
-                  <Typography>
-                    This is a media card. You can use this section to describe the content.
-                      </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small" color="primary">
-                    View
-                      </Button>
-                  <Button size="small" color="primary">
-                    Edit
-                      </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
+                    </Link>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      color="textPrimary"
+                    >
+                      {review.bookAuthor} / {review.bookSalesDate}
+                    </Typography>
+                    <Typography gutterBottom variant="subtitle2" color="secondary" className={classes.reviewUser}>
+                      {review.userName}さんによるレビュー
+                    </Typography>
+                    <Paper
+                      className={classes.reviewContent}
+                    >
+                      {
+                        isHighThanMaxTextHeight(review.content) ?
+                          <Collapse in={checked[idx] || false} collapsedHeight={210}>
+                            <Typography
+                              variant="body2"
+                              component="p"
+                              color="textPrimary"
+                              className={classes.reviewText}
+                            >
+                              {review.content}
+                            </Typography>
+                          </Collapse>
+                          :
+                          <Typography
+                            variant="body2"
+                            component="p"
+                            color="textPrimary"
+                            className={classes.reviewText}
+                          >
+                            {review.content}
+                          </Typography>
+                      }
+                      {
+                        isHighThanMaxTextHeight(review.content) &&
+                        <Link component="button" className={classes.openTextLink}>
+                          <Typography className={classes.openTextButton} variant="body1" onClick={() => handleReviewContentChange(idx)} >
+                            {checked[idx] || false ? "閉じる" : "続きを読む"}
+                            {checked[idx] || false ? <ExpandLess /> : <ExpandMore />}
+                          </Typography>
+                        </Link>
+                      }
+                    </Paper>
+                  </CardContent>
+                </Card>
+              </Grid>
+            )}
         </Grid>
       </Container>
     </React.Fragment>

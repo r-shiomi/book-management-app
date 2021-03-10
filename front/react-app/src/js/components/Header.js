@@ -10,7 +10,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { React, useState } from 'react';
 import HeaderMenu from './HeaderMenu';
 import HomeIcon from '@material-ui/icons/Home';
-import { Link as RouteLink } from 'react-router-dom';
+import { Link as RouteLink, useHistory, useLocation } from 'react-router-dom';
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 import RateReviewIcon from '@material-ui/icons/RateReview';
 
@@ -37,37 +37,57 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
 const Header = () => {
   const classes = useStyles();
   const [value, setValue] = useState(JSON.parse(localStorage.getItem('headerPage')) || 0);
+  const location = useLocation();
 
   const handleChange = (event, newValue) => {
     localStorage.setItem('headerPage', JSON.stringify(newValue));
     setValue(newValue);
   };
 
+  const clickHome = () => {
+    localStorage.setItem('headerPage', JSON.stringify(0));
+    setValue(0);
+  }
+
+  //戻るボタンを押下した時
+  window.onpopstate = e => {
+    console.log(location.pathname)
+    let value 
+    switch (location.pathname) {
+      case "/":
+        value = 0
+        break;
+      case "/book-search":
+        value = 1
+        break;
+      case "/book-shelf":
+        value = 2
+        break;
+      case "/book-review":
+        value = 3
+        break;
+    }
+    handleChange(e, value);
+  }
+
   return (
     <AppBar position="relative">
       <Toolbar className={classes.toolbar}>
         <BookIcon className={classes.icon} />
         <Typography variant="h6" noWrap className={classes.toolbarTitle}>
-          <Link href="/" underline="none" color="inherit">Book Management App</Link>
+          <Link to="/" component={RouteLink} onClick={clickHome} underline="none" color="inherit">Book Management App</Link>
         </Typography>
         <HeaderMenu />
       </Toolbar>
       <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary} >
-        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-          <Tab to="/" component={RouteLink} label={<div><HomeIcon style={{ verticalAlign: 'middle' }} /> トップ </div>} {...a11yProps(0)} className={classes.tab} />
-          <Tab to="/book-search" component={RouteLink} label={<div><SearchIcon style={{ verticalAlign: 'middle' }} /> 書籍検索 </div>} {...a11yProps(1)} className={classes.tab} />
-          <Tab to="/book-shelf" component={RouteLink} label={<div><LocalLibraryIcon style={{ verticalAlign: 'middle' }} /> 本棚 </div>} {...a11yProps(2)} className={classes.tab} />
-          <Tab to="/book-review" component={RouteLink} label={<div><RateReviewIcon style={{ verticalAlign: 'middle' }} /> 書評・レビュー </div>} {...a11yProps(3)} className={classes.tab} />
+        <Tabs value={value} onChange={handleChange} >
+          <Tab to="/" component={RouteLink} label={<div><HomeIcon style={{ verticalAlign: 'middle' }} /> トップ </div>} className={classes.tab} />
+          <Tab to="/book-search" component={RouteLink} label={<div><SearchIcon style={{ verticalAlign: 'middle' }} /> 書籍検索 </div>} className={classes.tab} />
+          <Tab to="/book-shelf" component={RouteLink} label={<div><LocalLibraryIcon style={{ verticalAlign: 'middle' }} /> 本棚 </div>} className={classes.tab} />
+          <Tab to="/book-review" component={RouteLink} label={<div><RateReviewIcon style={{ verticalAlign: 'middle' }} /> 書評・レビュー </div>} className={classes.tab} />
         </Tabs>
       </Toolbar>
     </AppBar>

@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
 const App = () => {
   const classes = useStyles();
 
+
   return (
     <ThemeProvider theme={theme}>
       <div className={classes.root}>
@@ -48,7 +49,7 @@ const App = () => {
         <Header />
         <main className={classes.main}>
           <Switch>
-            <Route exact path='/' component={Home} />
+            <Route exact path='/'component={Home} />
             <Route exact path='/book-search' component={BookSearch} />
             <Route exact path='/book/:bookId' component={BookDetail} />
             <Route exact path='/book-shelf' component={BookShelf} />

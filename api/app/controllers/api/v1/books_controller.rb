@@ -12,6 +12,7 @@ module Api
         book = @book.parse_json
         start_index = (review_page - 1) * hits
         book["totalPage"] = (book[:reviews].length / 10.to_f).ceil
+        book[:reviews].sort_by! { |r| r[:updatedAt] }.reverse!
         book[:reviews] = book[:reviews].slice(start_index, hits)
         #対象の本が本棚に登録されている時、そのステータスを返す
         if book_shelf = BookShelf.find_by(book_id: book[:id], user_id: current_user.id)

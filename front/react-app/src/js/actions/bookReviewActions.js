@@ -12,6 +12,10 @@ export const DELETE_BOOK_SHELF_STATUS_SUCCESS = 'DELETE_BOOK_SHELF_STATUS_SUCCES
 export const FIND_REVIEWS_BY_STATUS_STARTED = 'FIND_REVIEWS_BY_STATUS_STARTED'
 export const FIND_REVIEWS_BY_STATUS_FAILURE = 'FIND_REVIEWS_BY_STATUS_FAILURE'
 export const FIND_REVIEWS_BY_STATUS_SUCCESS = 'FIND_REVIEWS_BY_STATUS_SUCCESS'
+export const FIND_NEW_REVIEWS_STARTED = 'FIND_NEW_REVIEWS_STARTED'
+export const FIND_NEW_REVIEWS_FAILURE = 'FIND_NEW_REVIEWS_FAILURE'
+export const FIND_NEW_REVIEWS_SUCCESS = 'FIND_NEW_REVIEWS_SUCCESS'
+
 
 export const registerBook = (state, status) => {
   return dispatch => {
@@ -87,6 +91,21 @@ export const findReviewsByStatus = (status,page) => {
       .catch(err => {
         console.log(err.response);
         dispatch({ type: FIND_REVIEWS_BY_STATUS_FAILURE, payload: err });
+      });
+  }
+}
+
+export const findNewReviews = () => {
+  return dispatch => {
+    dispatch({ type: FIND_NEW_REVIEWS_STARTED });
+    axios.get("http://localhost:3000/api/v1/reviews/")
+      .then(res => {
+        console.log(res);
+        dispatch({ type: FIND_NEW_REVIEWS_SUCCESS, payload: res.data.data });
+      })
+      .catch(err => {
+        console.log(err.response);
+        dispatch({ type: FIND_NEW_REVIEWS_FAILURE, payload: err });
       });
   }
 }

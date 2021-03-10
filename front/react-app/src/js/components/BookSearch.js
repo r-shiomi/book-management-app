@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
   },
   pagenationRoot: {
     margin: 'auto'
+  },
+  search: {
+    backgroundColor: 'white'
   }
 }));
 
@@ -101,7 +104,7 @@ const BookSearch = () => {
 
   return (
     <Container maxWidth="md" className={classes.root}>
-      <Typography component="h1" variant="h3" align="center" color="textPrimary" gutterBottom>
+      <Typography component="h1" variant="h3" align="center" color="textSecondary" gutterBottom>
         書籍検索
       </Typography>
       <div className={classes.alert}>
@@ -119,6 +122,7 @@ const BookSearch = () => {
           label="本のタイトル、著者名"
           autoFocus
           onChange={handleChange}
+          className={classes.search}
           InputProps={{
             endAdornment: (
               <InputAdornment >
