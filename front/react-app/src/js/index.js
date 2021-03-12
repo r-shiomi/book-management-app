@@ -12,6 +12,8 @@ axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.interceptors.request.use(function (config) {
   const authHeaders = JSON.parse(window.localStorage.getItem('authHeaders'))
   if (authHeaders) {
+    console.log("request");
+    console.log(authHeaders['access-token']);
     config.headers[config.method] = {
       'access-token': authHeaders['access-token'],
       'client': authHeaders['client'],
@@ -32,6 +34,9 @@ axios.interceptors.response.use(function (response) {
       'expiry': response.headers['expiry'],
       'token-type': response.headers['token-type']
     }
+    console.log("response");
+    console.log(response);
+    console.log(response.headers['access-token']);
     window.localStorage.setItem('authHeaders', JSON.stringify(authHeaders));
   } 
   return response;

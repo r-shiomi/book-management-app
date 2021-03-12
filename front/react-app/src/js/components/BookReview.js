@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
 const BookReview = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [value, setValue] = useState(JSON.parse(localStorage.getItem('bookReviewStatus')) || 'your_review');
+  const [value, setValue] = useState(JSON.parse(localStorage.getItem('bookReviewStatus')) || 'your_reviews');
   const data = useSelector(state => state.bookReviewReducer.data);
   const [page, setPage] = useState(JSON.parse(localStorage.getItem('bookReviewPage')) || 1);
   const [checked, setChecked] = useState({});

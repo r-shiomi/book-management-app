@@ -78,7 +78,7 @@ export const findReviewsByStatus = (status,page) => {
     console.log(status);
     console.log(page);
     dispatch({ type: FIND_REVIEWS_BY_STATUS_STARTED });
-    axios.get("http://localhost:3000/api/v1/reviews/",{
+    axios.get("http://localhost:3000/api/v1/reviews/fetch_by_status",{
       params: {
         'status': status,
         'page': page,
@@ -98,7 +98,7 @@ export const findReviewsByStatus = (status,page) => {
 export const findNewReviews = () => {
   return dispatch => {
     dispatch({ type: FIND_NEW_REVIEWS_STARTED });
-    axios.get("http://localhost:3000/api/v1/reviews/")
+    axios.get("http://localhost:3000/api/v1/reviews")
       .then(res => {
         console.log(res);
         dispatch({ type: FIND_NEW_REVIEWS_SUCCESS, payload: res.data.data });

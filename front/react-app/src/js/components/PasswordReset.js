@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { React, useEffect, useState } from 'react';
 import { useDispatch } from "react-redux";
 import { Link as RouteLink, useHistory } from 'react-router-dom';
-import { login } from "../actions/userActions";
+import { resetPassword } from "../actions/userActions";
 import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
@@ -35,11 +35,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Login = () => {
+const PasswordReset = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const history = useHistory();
-  const [state, setState] = useState({ email: '', password: '', history: history });
+  const [state, setState] = useState({ email: '', history: history });
   const [errorText, setErrorText] = useState("");
 
   const handleChange = e => {
@@ -48,17 +48,14 @@ const Login = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    dispatch(login(state, setErrorText));
+    dispatch(resetPassword(state, setErrorText));
   };
 
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
         <Typography component="h1" variant="h5">
-          ログイン
+          パスワードリセット
         </Typography>
         {errorText && <Alert severity="error">{errorText}</Alert>}
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
@@ -68,23 +65,10 @@ const Login = () => {
             required
             fullWidth
             id="email"
-            label="メールアドレス"
+            label="登録メールアドレス"
             name="email"
             autoComplete="email"
             autoFocus
-            onChange={handleChange}
-            error={errorText ? true : false}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="パスワード"
-            type="password"
-            id="password"
-            autoComplete="current-password"
             onChange={handleChange}
             error={errorText ? true : false}
           />
@@ -95,25 +79,12 @@ const Login = () => {
             color="primary"
             className={classes.submit}
           >
-            ログイン
+            送信
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link to="/password-reset" component={RouteLink} variant="body2">
-                パスワードを忘れた方
-              </Link>
-            </Grid>
-            <Grid item>
-
-              <Link to="/signup" component={RouteLink} variant="body2">
-                {"アカウントをお持ちでない方"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
     </Container>
   );
 }
 
-export default Login;
+export default PasswordReset;

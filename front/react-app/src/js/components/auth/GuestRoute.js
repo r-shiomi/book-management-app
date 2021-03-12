@@ -4,7 +4,7 @@ import { Redirect, Route } from 'react-router-dom';
 
 const GuestRoute = props => {
   const isLoggedin = useSelector(state => state.userReducer.isLoggedin);
-
+  
   return isLoggedin ? <Redirect to="/" /> : <Route {...props} />;
 }
 

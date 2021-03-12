@@ -4,7 +4,10 @@ import {
   SIGNUP_FAILURE,
   LOGIN_STARTED,
   LOGIN_SUCCESS,
-  LOGIN_FAILURE
+  LOGIN_FAILURE,
+  RESET_PASSWORD_STARTED,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAILURE,
 } from '../actions/userActions';
 
 const initialState = {
@@ -14,6 +17,7 @@ const initialState = {
     name: null,
     age: null,
   },
+  message: null,
   loading: false,
   isLoggedin: false,
   error: null,
@@ -38,7 +42,17 @@ const userReducer = (state = initialState, action) => {
       return { ...state, loading: false, error: action.payload };
     }
     case LOGIN_SUCCESS: {
-      return {...state, loading: false, isLoggedin: true, user: action.payload}
+      return { ...state, loading: false, isLoggedin: true, user: action.payload };
+    }
+      
+    case RESET_PASSWORD_STARTED: {
+      return { ...state, loading: true };
+    }
+    case RESET_PASSWORD_FAILURE: {
+      return { ...state, loading: false, error: action.payload };
+    }
+    case RESET_PASSWORD_SUCCESS: {
+      return { ...state, loading: false, message: action.payload };
     }
       
   }

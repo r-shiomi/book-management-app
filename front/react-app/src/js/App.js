@@ -14,6 +14,9 @@ import BookSearch from './components/BookSearch';
 import BookDetail from './components/BookDetail';
 import BookShelf from './components/BookShelf';
 import BookReview from './components/BookReview';
+import PasswordReset from './components/PasswordReset';
+import PasswordResetConfirm from './components/PasswordResetConfirm';
+import PasswordChange from './components/PasswordChange';
 
 const theme = createMuiTheme({
   palette: {
@@ -49,18 +52,18 @@ const App = () => {
         <Header />
         <main className={classes.main}>
           <Switch>
-            <Route exact path='/'component={Home} />
             <Route exact path='/book-search' component={BookSearch} />
             <Route exact path='/book/:bookId' component={BookDetail} />
             <Route exact path='/book-shelf' component={BookShelf} />
             <Route exact path='/book-review' component={BookReview} />
-            {/* <UserRoute>
-              </UserRoute> */}
-            <GuestRoute>
-              <Route path="/login" component={Login} />
-              <Route exact path="/signup" component={SignUp} />
-              <Route exact path="/signup/confirm" component={SignUpConfirm} />
-            </GuestRoute>
+            <Route exact path='/' component={Home} />
+            <Route exact path="/password/change" component={PasswordChange} />
+            <GuestRoute path="/login" component={Login} />
+            <GuestRoute exact path="/signup" component={SignUp} />
+            <GuestRoute exact path="/signup/confirm" component={SignUpConfirm} />
+            <GuestRoute exact path="/password-reset" component={PasswordReset} />
+            <GuestRoute exact path="/password-reset/confirm" component={PasswordResetConfirm} />
+            
           </Switch>
         </main>
         <Footer />

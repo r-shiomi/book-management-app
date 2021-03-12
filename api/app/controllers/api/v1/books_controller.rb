@@ -6,24 +6,7 @@ module Api
     class BooksController < ApplicationController
       before_action :set_book, only: [:show]
 
-      def show
-        review_page = params[:reviewPage].to_i
-        hits = 10 #1ページあたりの取得件数
-        book = @book.parse_json
-        start_index = (review_page - 1) * hits
-        book["totalPage"] = (book[:reviews].length / 10.to_f).ceil
-        book[:reviews].sort_by! { |r| r[:updatedAt] }.reverse!
-        book[:reviews] = book[:reviews].slice(start_index, hits)
-        #対象の本が本棚に登録されている時、そのステータスを返す
-        if book_shelf = BookShelf.find_by(book_id: book[:id], user_id: current_user.id)
-          book[:bookShelfId] = book_shelf.id
-          book[:bookShelfStatus] = book_shelf.status
-        end
-
-        render json: { status: "SUCCESS", message: "Loaded the book", data: book }
-      end
-
-      def search
+      def index
         uri = "https://app.rakuten.co.jp/services/api/BooksTotal/Search/20170404"
         query = URI.encode_www_form({
           applicationId: ENV["APPLICATION_ID"],
@@ -60,6 +43,25 @@ module Api
         resData["Items"] = resBooks
         render json: { status: "SUCCESS", message: "Loaded books", data: resData }
       end
+      
+      def show
+        review_page = params[:reviewPage].to_i
+        hits = 10 #1ページあたりの取得件数
+        book = @book.parse_json
+        start_index = (review_page - 1) * hits
+        book["totalPage"] = (book[:reviews].length / 10.to_f).ceil
+        book[:reviews].sort_by! { |r| r[:updatedAt] }.reverse!
+        book[:reviews] = book[:reviews].slice(start_index, hits)
+        #対象の本が本棚に登録されている時、そのステータスを返す
+        if book_shelf = BookShelf.find_by(book_id: book[:id], user_id: current_user.id)
+          book[:bookShelfId] = book_shelf.id
+          book[:bookShelfStatus] = book_shelf.status
+        end
+
+        render json: { status: "SUCCESS", message: "Loaded the book", data: book }
+      end
+
+    
 
       private
 
