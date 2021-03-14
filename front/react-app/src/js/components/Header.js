@@ -7,7 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import BookIcon from '@material-ui/icons/Book';
 import SearchIcon from '@material-ui/icons/Search';
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import HeaderMenu from './HeaderMenu';
 import HomeIcon from '@material-ui/icons/Home';
 import { Link as RouteLink, useHistory, useLocation } from 'react-router-dom';
@@ -54,8 +54,8 @@ const Header = () => {
     setValue(0);
   }
 
-  //戻る・進むボタンを押下した時のパスによってヘッダータブの選択状態を変更する
-  window.onpopstate = e => {
+  //画面遷移によってヘッダータブの選択状態を変更する
+  useEffect(() => {
     let value
     const targetPath = location.pathname;
     if (targetPath === "/") {
@@ -70,8 +70,8 @@ const Header = () => {
       value = JSON.parse(localStorage.getItem('headerPage'));
     }
         
-    handleChange(e, value);
-  }
+    handleChange(null, value);
+  },[location])
 
   return (
     <AppBar position="relative">

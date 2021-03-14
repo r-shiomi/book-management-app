@@ -61,17 +61,16 @@ const BookShelf = () => {
   const [page, setPage] = useState(JSON.parse(localStorage.getItem('bookShelfPage')) || 1);
 
   const handleBookShelfTabsChange = (event, newValue) => {
-    console.log(newValue);
+    localStorage.setItem('bookShelfStatus', JSON.stringify(newValue));
     setValue(newValue);
     setPage(1);
     dispatch(findBooksByStatus(newValue, 1));
   };
 
   useEffect(() => {
-    localStorage.setItem('bookShelfStatus', JSON.stringify(value));
     localStorage.setItem('bookShelfPage', JSON.stringify(page));
     dispatch(findBooksByStatus(value, page));
-  }, [])
+  }, [page])
 
   return (
     <Container maxWidth="md" className={classes.root}>

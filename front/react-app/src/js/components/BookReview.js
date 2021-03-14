@@ -96,6 +96,7 @@ const BookReview = () => {
 
 
   const handleBookReviewTabsChange = (event, newValue) => {
+    localStorage.setItem('bookReviewStatus', JSON.stringify(newValue));
     setValue(newValue);
     setPage(1);
     dispatch(findReviewsByStatus(newValue, 1));
@@ -118,7 +119,6 @@ const BookReview = () => {
   };
 
   useEffect(() => {
-    localStorage.setItem('bookReviewStatus', JSON.stringify(value));
     localStorage.setItem('bookReviewPage', JSON.stringify(page));
     dispatch(findReviewsByStatus(value, page));
 

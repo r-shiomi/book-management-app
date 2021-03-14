@@ -135,7 +135,7 @@ const BookSearch = () => {
         />
       </form>
 
-      {books.Items.length !== 0 &&
+      {(books.Items !== undefined) && (books.Items.length !== 0) &&
         <div className={classes.root}>
           <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom className={classes.searchResult}>
             検索結果
