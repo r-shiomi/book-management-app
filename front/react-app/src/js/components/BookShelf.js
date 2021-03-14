@@ -47,6 +47,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     marginTop: theme.spacing(2),
   },
+  bookNotRegisteredText: {
+    padding: theme.spacing(3),
+    textAlign: 'center',
+  }
 }));
 
 const BookShelf = () => {
@@ -57,6 +61,7 @@ const BookShelf = () => {
   const [page, setPage] = useState(JSON.parse(localStorage.getItem('bookShelfPage')) || 1);
 
   const handleBookShelfTabsChange = (event, newValue) => {
+    console.log(newValue);
     setValue(newValue);
     setPage(1);
     dispatch(findBooksByStatus(newValue, 1));
@@ -66,7 +71,7 @@ const BookShelf = () => {
     localStorage.setItem('bookShelfStatus', JSON.stringify(value));
     localStorage.setItem('bookShelfPage', JSON.stringify(page));
     dispatch(findBooksByStatus(value, page));
-  }, [page])
+  }, [])
 
   return (
     <Container maxWidth="md" className={classes.root}>
@@ -79,9 +84,9 @@ const BookShelf = () => {
           <Tab value="finished_reading" label="読み終わった本" className={classes.tab} />
           <Tab value="tsundoku" label="積読本" className={classes.tab} />
         </Tabs>
-        {(data.books !== undefined) &&
+        {(data.books !== undefined) && (data.books.length !== 0) ?
           data.books.map((book, idx) =>
-            <Paper key={idx} className={classes.paper}>
+            <Paper key={idx}>
               <ListItem alignItems="flex-start" className={classes.listItem}>
                 <Link to={`/book/${book.id}`} component={RouteLink}>
                   <img className={classes.img} src={book.mediumImageUrl} />
@@ -108,7 +113,15 @@ const BookShelf = () => {
               </ListItem>
               <Divider />
             </Paper>
-          )}
+          )
+          :
+          <Typography
+            className={classes.bookNotRegisteredText}
+            variant="body1"
+            color="textSecondary">
+            本が登録されていません
+          </Typography>
+        }
       </Paper>
       {(data.books !== undefined && data.books.length !== 0) &&
         <Pagination

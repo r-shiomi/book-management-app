@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import { Link as RouteLink, useParams,Prompt, useLocation } from 'react-router-dom';
+import { Link as RouteLink, useParams, Prompt, useLocation } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
@@ -80,7 +80,10 @@ const useStyles = makeStyles((theme) => ({
   openTextButton: {
     display: 'flex',
   },
-
+  noReviewsText: {
+    padding: theme.spacing(3),
+    textAlign: 'center',
+  }
 }));
 
 const BookReview = () => {
@@ -90,7 +93,7 @@ const BookReview = () => {
   const data = useSelector(state => state.bookReviewReducer.data);
   const [page, setPage] = useState(JSON.parse(localStorage.getItem('bookReviewPage')) || 1);
   const [checked, setChecked] = useState({});
- 
+
 
   const handleBookReviewTabsChange = (event, newValue) => {
     setValue(newValue);
@@ -120,7 +123,7 @@ const BookReview = () => {
     dispatch(findReviewsByStatus(value, page));
 
   }, [page])
-  
+
   return (
     <Container maxWidth="md" className={classes.root}>
       <Paper>
@@ -131,9 +134,9 @@ const BookReview = () => {
           <Tab value="other_users_reviews" label="他ユーザの書評・レビュー（共読）" className={classes.tab} />
           <Tab value="rough_draft" label="下書き" className={classes.tab} />
         </Tabs>
-        {(data.reviews !== undefined) &&
+        {(data.reviews !== undefined) && (data.reviews.length !== 0) ?
           data.reviews.map((review, idx) =>
-            <Paper key={idx} className={classes.paper}>
+            <Paper key={idx}>
               <ListItem alignItems="flex-start" className={classes.listItem}>
                 <Link to={`/book/${review.bookId}`} component={RouteLink}>
                   <img className={classes.img} src={review.bookMediumImageUrl} />
@@ -167,7 +170,7 @@ const BookReview = () => {
                       variant="subtitle2"
                       color="textSecondary"
                     >
-                      { review.userName && `${review.userName}さんによる`}書評・レビュー
+                      {review.userName && `${review.userName}さんによる`}書評・レビュー
                       </Typography>
                     <Paper
                       variant="outlined"
@@ -210,7 +213,14 @@ const BookReview = () => {
               </ListItem>
               <Divider />
             </Paper>
-          )}
+          )
+          :
+          <Typography
+            className={classes.noReviewsText}
+            variant="body1"
+            color="textSecondary">
+            書評・レビューがありません
+          </Typography>}
       </Paper>
       {(data.reviews !== undefined && data.reviews.length !== 0) &&
         <Pagination

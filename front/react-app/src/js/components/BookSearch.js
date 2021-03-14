@@ -98,7 +98,7 @@ const BookSearch = () => {
 
   useEffect(() => {
     if (fetched) {
-      books.length === 0 ? setSearchErrorText(`『${state.keyword}』` + "に該当する書籍が見つかりませんでした。") : setSearchErrorText("");
+      books.Items.length === 0 ? setSearchErrorText(`『${state.keyword}』` + "に該当する書籍が見つかりませんでした。") : setSearchErrorText("");
     }
   }, [books])
 
@@ -135,7 +135,7 @@ const BookSearch = () => {
         />
       </form>
 
-      {books.length !== 0 &&
+      {books.Items.length !== 0 &&
         <div className={classes.root}>
           <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom className={classes.searchResult}>
             検索結果

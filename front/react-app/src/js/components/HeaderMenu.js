@@ -6,7 +6,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link as RouteLink, useHistory, useLocation } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   link: {
@@ -56,17 +56,16 @@ const HeaderMenu = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>プロフィール</MenuItem>
-          <MenuItem onClick={handleClose}>マイページ</MenuItem>
+          <MenuItem to="/password/change" component={RouteLink} onClick={handleClose}>パスワード変更</MenuItem>
           <MenuItem onClick={handleLogout}>ログアウト</MenuItem>
         </Menu>
       </div>
       :
       <div>
-        <Button to="/signup" component={Link} variant="contained" className={classes.link}>
+        <Button to="/signup" component={RouteLink} variant="contained" className={classes.link}>
           新規登録
           </Button>
-        <Button to="/login" component={Link} variant="outlined" color="inherit" className={classes.link}>
+        <Button to="/login" component={RouteLink} variant="outlined" color="inherit" className={classes.link}>
           ログイン
           </Button>
       </div>

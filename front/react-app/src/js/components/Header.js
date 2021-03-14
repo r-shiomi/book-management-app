@@ -13,6 +13,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import { Link as RouteLink, useHistory, useLocation } from 'react-router-dom';
 import LocalLibraryIcon from '@material-ui/icons/LocalLibrary';
 import RateReviewIcon from '@material-ui/icons/RateReview';
+import { useSelector } from 'react-redux';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -41,6 +42,7 @@ const Header = () => {
   const classes = useStyles();
   const [value, setValue] = useState(JSON.parse(localStorage.getItem('headerPage')) || 0);
   const location = useLocation();
+  const isLoggedin = useSelector(state => state.userReducer.isLoggedin);
 
   const handleChange = (event, newValue) => {
     localStorage.setItem('headerPage', JSON.stringify(newValue));
@@ -52,24 +54,22 @@ const Header = () => {
     setValue(0);
   }
 
-  //戻るボタンを押下した時
+  //戻る・進むボタンを押下した時のパスによってヘッダータブの選択状態を変更する
   window.onpopstate = e => {
-    console.log(location.pathname)
-    let value 
-    switch (location.pathname) {
-      case "/":
-        value = 0
-        break;
-      case "/book-search":
-        value = 1
-        break;
-      case "/book-shelf":
-        value = 2
-        break;
-      case "/book-review":
-        value = 3
-        break;
+    let value
+    const targetPath = location.pathname;
+    if (targetPath === "/") {
+      value = 0;
+    } else if (targetPath === "/book-search" || targetPath.startsWith("/book/")) {
+      value = 1;
+    } else if (targetPath === "/book-shelf") {
+      value = 2;
+    } else if (targetPath === "/book-review") {
+      value = 3;
+    } else {
+      value = JSON.parse(localStorage.getItem('headerPage'));
     }
+        
     handleChange(e, value);
   }
 
@@ -83,12 +83,19 @@ const Header = () => {
         <HeaderMenu />
       </Toolbar>
       <Toolbar component="nav" variant="dense" className={classes.toolbarSecondary} >
-        <Tabs value={value} onChange={handleChange} >
-          <Tab to="/" component={RouteLink} label={<div><HomeIcon style={{ verticalAlign: 'middle' }} /> トップ </div>} className={classes.tab} />
-          <Tab to="/book-search" component={RouteLink} label={<div><SearchIcon style={{ verticalAlign: 'middle' }} /> 書籍検索 </div>} className={classes.tab} />
-          <Tab to="/book-shelf" component={RouteLink} label={<div><LocalLibraryIcon style={{ verticalAlign: 'middle' }} /> 本棚 </div>} className={classes.tab} />
-          <Tab to="/book-review" component={RouteLink} label={<div><RateReviewIcon style={{ verticalAlign: 'middle' }} /> 書評・レビュー </div>} className={classes.tab} />
-        </Tabs>
+        {isLoggedin ?
+          <Tabs value={value} onChange={handleChange} >
+            <Tab to="/" component={RouteLink} label={<div><HomeIcon style={{ verticalAlign: 'middle' }} /> トップ </div>} className={classes.tab} />
+            <Tab to="/book-search" component={RouteLink} label={<div><SearchIcon style={{ verticalAlign: 'middle' }} /> 書籍検索 </div>} className={classes.tab} />
+            <Tab to="/book-shelf" component={RouteLink} label={< div > <LocalLibraryIcon style={{ verticalAlign: 'middle' }} /> 本棚 </div >} className={classes.tab} />
+            <Tab to="/book-review" component={RouteLink} label={<div><RateReviewIcon style={{ verticalAlign: 'middle' }} /> 書評・レビュー </div>} className={classes.tab} />
+          </Tabs>
+          :
+          <Tabs value={value} onChange={handleChange} >
+            <Tab to="/" component={RouteLink} label={<div><HomeIcon style={{ verticalAlign: 'middle' }} /> トップ </div>} className={classes.tab} />
+            <Tab to="/book-search" component={RouteLink} label={<div><SearchIcon style={{ verticalAlign: 'middle' }} /> 書籍検索 </div>} className={classes.tab} />
+          </Tabs>
+        }
       </Toolbar>
     </AppBar>
   );

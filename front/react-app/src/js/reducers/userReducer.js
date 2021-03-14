@@ -8,6 +8,9 @@ import {
   RESET_PASSWORD_STARTED,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAILURE,
+  CHANGE_PASSWORD_STARTED,
+  CHANGE_PASSWORD_FAILURE,
+  CHANGE_PASSWORD_SUCCESS,
 } from '../actions/userActions';
 
 const initialState = {
@@ -52,6 +55,16 @@ const userReducer = (state = initialState, action) => {
       return { ...state, loading: false, error: action.payload };
     }
     case RESET_PASSWORD_SUCCESS: {
+      return { ...state, loading: false, message: action.payload };
+    }
+      
+    case CHANGE_PASSWORD_STARTED: {
+      return { ...state, loading: true };
+    }
+    case CHANGE_PASSWORD_FAILURE: {
+      return { ...state, loading: false, error: action.payload };
+    }
+    case CHANGE_PASSWORD_SUCCESS: {
       return { ...state, loading: false, message: action.payload };
     }
       

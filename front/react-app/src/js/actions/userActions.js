@@ -111,12 +111,16 @@ export const changePassword = (state, setErrorText) => {
         console.log(res);
 
         //パスワードリセット画面で登録メールを送信後、確認メール送信画面へ遷移
-        state.history.replace('/password-reset/confirm');
-        dispatch({ type: CHANGE_PASSWORD_SUCCESS, payload: res.data.data });
+        state.history.replace('/password/change/success');
+        dispatch({ type: CHANGE_PASSWORD_SUCCESS, payload: res.data.message });
       })
       .catch(err => {
         console.log(err.response);
-        setErrorText(err.response.data.errors[0]);
+        if (err.response.data.errors.full_messages) {
+          setErrorText(err.response.data.errors.full_messages[0]);
+        } else {
+          setErrorText(err.response.data.errors[0]);
+        }
         dispatch({ type: CHANGE_PASSWORD_FAILURE, payload: err });
       });
   }
