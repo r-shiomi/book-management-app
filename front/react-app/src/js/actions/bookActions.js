@@ -8,7 +8,7 @@ export const getBook = (state) => {
   return dispatch => {
     console.log(state.bookId);
     dispatch({ type: GET_BOOK_STARTED });
-    axios.get(`http://localhost:3000/api/v1/books/${state.bookId}`,  {
+    axios.get(`/api/v1/books/${state.bookId}`,  {
       params: {
         'reviewPage': state.reviewPage,
       }
