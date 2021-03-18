@@ -9,7 +9,7 @@ export const search = (keyword, page) => {
     dispatch({ type: SEARCH_STARTED });
     console.log(keyword);
     console.log(page);
-    axios.get('http://localhost:3000/api/v1/books', {
+    axios.get('/api/v1/books', {
       params: {
         'keyword': keyword,
         'page': page

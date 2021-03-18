@@ -16,7 +16,7 @@ export const CHANGE_PASSWORD_FAILURE= 'CHANGE_PASSWORD_FAILURE'
 export const signUp = (state, setError) => {
   return dispatch => {
     dispatch({ type: SIGNUP_STARTED });
-    axios.post('http://localhost:3000/auth', {
+    axios.post('/auth', {
       'name': state.name,
       'email': state.email,
       'password': state.password,
@@ -51,7 +51,7 @@ export const signUp = (state, setError) => {
 export const login = (state, setErrorText) => {
   return dispatch => {
     dispatch({ type: LOGIN_STARTED });
-    axios.post('http://localhost:3000/auth/sign_in', {
+    axios.post('/auth/sign_in', {
       'email': state.email,
       'password': state.password,
     }
@@ -81,7 +81,7 @@ export const login = (state, setErrorText) => {
 export const resetPassword = (state, setErrorText) => {
   return dispatch => {
     dispatch({ type: RESET_PASSWORD_STARTED });
-    axios.post('http://localhost:3000/auth/password', {
+    axios.post('/auth/password', {
       'email': state.email,
       'redirect_url': 'http://localhost:8000/password/change/',
     })
@@ -103,7 +103,7 @@ export const resetPassword = (state, setErrorText) => {
 export const changePassword = (state, setErrorText) => {
   return dispatch => {
     dispatch({ type: CHANGE_PASSWORD_STARTED });
-    axios.put('http://localhost:3000/auth/password', {
+    axios.put('/auth/password', {
       'password': state.password,
       'password_confirmation': state.passwordConfirmation,
     })

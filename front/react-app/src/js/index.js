@@ -7,6 +7,8 @@ import reportWebVitals from './reportWebVitals';
 import store from './store.js';
 import axios from 'axios';
 
+axios.defaults.baseURL = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_API_URL : process.env.REACT_APP_DEV_API_URL;
+console.log(axios.defaults.baseURL);
 //APIリクエスト/レスポンス時のトークン設定共通化
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.interceptors.request.use(function (config) {

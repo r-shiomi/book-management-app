@@ -18,7 +18,7 @@ export const registerBook = (state, status) => {
     console.log(state.bookId);
     console.log(status);
     dispatch({ type: REGISTER_BOOK_STARTED });
-    axios.post(`http://localhost:3000/api/v1/book_shelves`, {
+    axios.post(`/api/v1/book_shelves`, {
       bookId: state.bookId,
       status: status,
     })
@@ -40,7 +40,7 @@ export const changeBookShelfStatus = (book, status, state) => {
     console.log(book.bookShelfStatus);
     if (book.bookShelfStatus == status) {
       dispatch({ type: DELETE_BOOK_SHELF_STATUS_STARTED });
-      axios.delete(`http://localhost:3000/api/v1/book_shelves/${book.bookShelfId}`)
+      axios.delete(`/api/v1/book_shelves/${book.bookShelfId}`)
         .then(res => {
           console.log(res);
           dispatch({ type: DELETE_BOOK_SHELF_STATUS_SUCCESS, payload: res.data.data });
@@ -52,7 +52,7 @@ export const changeBookShelfStatus = (book, status, state) => {
         });
     } else {
       dispatch({ type: UPDATE_BOOK_SHELF_STATUS_STARTED });
-      axios.put(`http://localhost:3000/api/v1/book_shelves/${book.bookShelfId}`, {
+      axios.put(`/api/v1/book_shelves/${book.bookShelfId}`, {
         status: status,
       })
         .then(res => {

@@ -8,7 +8,7 @@ export const createReview = (state, setReviewAlertOpen) => {
   return dispatch => {
     console.log(state);
     dispatch({ type: CREATE_REVIEW_STARTED });
-    axios.post(`http://localhost:3000/api/v1/reviews`, {
+    axios.post(`/api/v1/reviews`, {
       content: state.content,
       bookId: state.bookId,
     })

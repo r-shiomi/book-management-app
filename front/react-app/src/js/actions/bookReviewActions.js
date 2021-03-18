@@ -22,7 +22,7 @@ export const registerBook = (state, status) => {
     console.log(state.bookId);
     console.log(status);
     dispatch({ type: REGISTER_BOOK_STARTED });
-    axios.post(`http://localhost:3000/api/v1/book_shelves`, {
+    axios.post(`/api/v1/book_shelves`, {
       bookId: state.bookId,
       status: status,
     })
@@ -44,7 +44,7 @@ export const changeBookShelfStatus = (book, status, state) => {
     console.log(book.bookShelfStatus);
     if (book.bookShelfStatus == status) {
       dispatch({ type: DELETE_BOOK_SHELF_STATUS_STARTED });
-      axios.delete(`http://localhost:3000/api/v1/book_shelves/${book.bookShelfId}`)
+      axios.delete(`/api/v1/book_shelves/${book.bookShelfId}`)
         .then(res => {
           console.log(res);
           dispatch({ type: DELETE_BOOK_SHELF_STATUS_SUCCESS, payload: res.data.data });
@@ -56,7 +56,7 @@ export const changeBookShelfStatus = (book, status, state) => {
         });
     } else {
       dispatch({ type: UPDATE_BOOK_SHELF_STATUS_STARTED });
-      axios.put(`http://localhost:3000/api/v1/book_shelves/${book.bookShelfId}`, {
+      axios.put(`/api/v1/book_shelves/${book.bookShelfId}`, {
         status: status,
       })
         .then(res => {
@@ -78,7 +78,7 @@ export const findReviewsByStatus = (status,page) => {
     console.log(status);
     console.log(page);
     dispatch({ type: FIND_REVIEWS_BY_STATUS_STARTED });
-    axios.get("http://localhost:3000/api/v1/reviews/fetch_by_status",{
+    axios.get("/api/v1/reviews/fetch_by_status",{
       params: {
         'status': status,
         'page': page,
@@ -97,8 +97,9 @@ export const findReviewsByStatus = (status,page) => {
 
 export const findNewReviews = () => {
   return dispatch => {
+    console.log(axios.defaults.baseURL);
     dispatch({ type: FIND_NEW_REVIEWS_STARTED });
-    axios.get("http://localhost:3000/api/v1/reviews")
+    axios.get("/api/v1/reviews")
       .then(res => {
         console.log(res);
         dispatch({ type: FIND_NEW_REVIEWS_SUCCESS, payload: res.data.data });
