@@ -112,6 +112,7 @@ const BookDetail = () => {
   const [checked, setChecked] = useState({});
   const [reviewAlertOpen, setReviewAlertOpen] = useState(false);
   const isFirstRender = useRef(false);
+  const isLoggedin = useSelector(state => state.userReducer.isLoggedin);
 
   const reviewAlertClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -221,68 +222,75 @@ const BookDetail = () => {
             <Button target="_blank" variant="outlined" color="primary" href={book.itemUrl} className={classes.rakutenButton}>
               楽天購入ページへ
             </Button>
-            {book.bookShelfStatus !== undefined ?
-              <div>
-                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleBookShelfClick} variant="outlined" startIcon={<CheckCircleIcon />} className={classes.bookShelfCheckedButton}>
-                  本棚に登録済み
+
+            {isLoggedin && (
+              book.bookShelfStatus !== undefined ?
+                <div>
+                  <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleBookShelfClick} variant="outlined" startIcon={<CheckCircleIcon />} className={classes.bookShelfCheckedButton}>
+                    本棚に登録済み
               </Button>
-                <Menu
-                  id="simple-menu"
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={Boolean(anchorEl)}
-                  onClose={handleBookShelfClose}
-                >
-                  <MenuItem data-my-value="want_to_read" onClick={handleBookShelfMenuClick} >
-                    {book.bookShelfStatus == 'want_to_read' &&
-                      <ListItemIcon className={classes.listItemIcon}>
-                        <CheckIcon className={classes.checkIcon} />
-                      </ListItemIcon>}
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleBookShelfClose}
+                  >
+                    <MenuItem data-my-value="want_to_read" onClick={handleBookShelfMenuClick} >
+                      {book.bookShelfStatus == 'want_to_read' &&
+                        <ListItemIcon className={classes.listItemIcon}>
+                          <CheckIcon className={classes.checkIcon} />
+                        </ListItemIcon>}
                       読みたい本
                   </MenuItem>
-                  <MenuItem data-my-value="reading" onClick={handleBookShelfMenuClick} >
-                    {book.bookShelfStatus == 'reading' &&
-                      <ListItemIcon className={classes.listItemIcon}>
-                        <CheckIcon />
-                      </ListItemIcon>}
+                    <MenuItem data-my-value="reading" onClick={handleBookShelfMenuClick} >
+                      {book.bookShelfStatus == 'reading' &&
+                        <ListItemIcon className={classes.listItemIcon}>
+                          <CheckIcon />
+                        </ListItemIcon>}
                     読んでる本
                   </MenuItem>
-                  <MenuItem data-my-value="finished_reading" onClick={handleBookShelfMenuClick}>
-                    {book.bookShelfStatus == 'finished_reading' &&
-                      <ListItemIcon className={classes.listItemIcon}>
-                        <CheckIcon />
-                      </ListItemIcon>}
+                    <MenuItem data-my-value="finished_reading" onClick={handleBookShelfMenuClick}>
+                      {book.bookShelfStatus == 'finished_reading' &&
+                        <ListItemIcon className={classes.listItemIcon}>
+                          <CheckIcon />
+                        </ListItemIcon>}
                       読み終わった本
                   </MenuItem>
-                  <MenuItem data-my-value="tsundoku" onClick={handleBookShelfMenuClick}>
-                    {book.bookShelfStatus == 'tsundoku' &&
-                      <ListItemIcon className={classes.listItemIcon}>
-                        <CheckIcon />
-                      </ListItemIcon>}
+                    <MenuItem data-my-value="tsundoku" onClick={handleBookShelfMenuClick}>
+                      {book.bookShelfStatus == 'tsundoku' &&
+                        <ListItemIcon className={classes.listItemIcon}>
+                          <CheckIcon />
+                        </ListItemIcon>}
                       積読本
                   </MenuItem>
-                </Menu>
-              </div>
-              :
-              <div>
-                <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleBookShelfClick} variant="outlined" color="secondary" startIcon={<AddCircleIcon />} className={classes.bookShelfButton}>
-                  本棚に登録
+                  </Menu>
+                </div>
+                :
+                <div>
+                  <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleBookShelfClick} variant="outlined" color="secondary" startIcon={<AddCircleIcon />} className={classes.bookShelfButton}>
+                    本棚に登録
               </Button>
-                <Menu
-                  id="simple-menu"
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={Boolean(anchorEl)}
-                  onClose={handleBookShelfClose}
-                >
-                  <MenuItem data-my-value="want_to_read" onClick={handleBookShelfMenuClick}>読みたい本</MenuItem>
-                  <MenuItem data-my-value="reading" onClick={handleBookShelfMenuClick}>読んでる本</MenuItem>
-                  <MenuItem data-my-value="finished_reading" onClick={handleBookShelfMenuClick}>読み終わった本</MenuItem>
-                  <MenuItem data-my-value="tsundoku" onClick={handleBookShelfMenuClick}>積読本</MenuItem>
-                </Menu>
-              </div>
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleBookShelfClose}
+                  >
+                    <MenuItem data-my-value="want_to_read" onClick={handleBookShelfMenuClick}>読みたい本</MenuItem>
+                    <MenuItem data-my-value="reading" onClick={handleBookShelfMenuClick}>読んでる本</MenuItem>
+                    <MenuItem data-my-value="finished_reading" onClick={handleBookShelfMenuClick}>読み終わった本</MenuItem>
+                    <MenuItem data-my-value="tsundoku" onClick={handleBookShelfMenuClick}>積読本</MenuItem>
+                  </Menu>
+                </div>)
             }
 
+            {isLoggedin &&
+              <Button variant="outlined" color="default" startIcon={<RateReviewIcon />} onClick={handleDialogOpen} className={classes.reviewButton}>
+                レビューを書く
+          </Button>
+            }
 
             <Snackbar open={reviewAlertOpen} autoHideDuration={6000} onClose={reviewAlertClose}>
               <Alert elevation={6} variant="filled" onClose={reviewAlertClose} severity="success">
@@ -290,9 +298,6 @@ const BookDetail = () => {
               </Alert>
             </Snackbar>
 
-            <Button variant="outlined" color="default" startIcon={<RateReviewIcon />} onClick={handleDialogOpen} className={classes.reviewButton}>
-              レビューを書く
-            </Button>
             <Dialog open={open} onClose={handleDialogClose} aria-labelledby="form-dialog-title" maxWidth="sm" fullWidth>
               <DialogTitle id="form-dialog-title">書評・レビュー</DialogTitle>
               <DialogContent>
@@ -364,7 +369,8 @@ const BookDetail = () => {
           書評・レビューがありません
         </Typography>
       }
-      {book.reviews !== undefined &&
+
+      {(book.reviews !== undefined) && (book.reviews.length !== 0) &&
         <Pagination
           className={classes.pagenationRoot}
           count={book.totalPage}
@@ -372,7 +378,8 @@ const BookDetail = () => {
           shape="rounded"
           onChange={(e, page) => setState({ ...state, reviewPage: page })}
           page={state.reviewPage}
-        />}
+        />
+      }
     </Container >
 
 
