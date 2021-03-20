@@ -113,6 +113,7 @@ const BookDetail = () => {
   const [reviewAlertOpen, setReviewAlertOpen] = useState(false);
   const isFirstRender = useRef(false);
   const isLoggedin = useSelector(state => state.userReducer.isLoggedin);
+  const [errorText, setErrorText] = useState("");
 
   const reviewAlertClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -133,6 +134,7 @@ const BookDetail = () => {
 
   const handleDialogClose = () => {
     setOpen(false);
+    setErrorText("");
   };
 
   const handleChange = e => {
@@ -141,6 +143,11 @@ const BookDetail = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    if (!state.content) {
+      setErrorText("レビューを入力してください");
+      return;
+    }
+    setErrorText(""); 
     dispatch(createReview(state, setReviewAlertOpen));
     handleDialogClose();
   };
@@ -302,6 +309,7 @@ const BookDetail = () => {
               <DialogTitle id="form-dialog-title">書評・レビュー</DialogTitle>
               <DialogContent>
                 <DialogContentText>
+                {errorText && <Alert severity="error">{errorText}</Alert>}
                 </DialogContentText>
                 <form noValidate autoComplete="off">
                   <TextField
@@ -313,6 +321,7 @@ const BookDetail = () => {
                     variant="outlined"
                     fullWidth
                     onChange={handleChange}
+                    error={errorText ? true : false}
                   />
                 </form>
               </DialogContent>
