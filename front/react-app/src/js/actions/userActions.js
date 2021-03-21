@@ -11,12 +11,15 @@ export const RESET_PASSWORD_SUCCESS = 'RESET_PASSWORD_SUCCESS'
 export const RESET_PASSWORD_FAILURE = 'RESET_PASSWORD_FAILURE'
 export const CHANGE_PASSWORD_STARTED = 'CHANGE_PASSWORD_STARTED'
 export const CHANGE_PASSWORD_SUCCESS = 'CHANGE_PASSWORD_SUCCESS'
-export const CHANGE_PASSWORD_FAILURE= 'CHANGE_PASSWORD_FAILURE'
+export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE'
+export const GUEST_LOGIN_STARTED = 'GUEST_LOGIN_STARTED'
+export const GUEST_LOGIN_SUCCESS = 'GUEST_LOGIN_SUCCESS'
+export const GUEST_LOGIN_FAILURE = 'GUEST_LOGIN_FAILURE'
 
 export const signUp = (state, setError) => {
   return dispatch => {
     dispatch({ type: SIGNUP_STARTED });
-    axios.post('/auth', {
+    axios.post('/api/auth', {
       'name': state.name,
       'email': state.email,
       'password': state.password,
@@ -51,7 +54,7 @@ export const signUp = (state, setError) => {
 export const login = (state, setErrorText) => {
   return dispatch => {
     dispatch({ type: LOGIN_STARTED });
-    axios.post('/auth/sign_in', {
+    axios.post('/api/auth/sign_in', {
       'email': state.email,
       'password': state.password,
     }
@@ -81,7 +84,7 @@ export const login = (state, setErrorText) => {
 export const resetPassword = (state, setErrorText) => {
   return dispatch => {
     dispatch({ type: RESET_PASSWORD_STARTED });
-    axios.post('/auth/password', {
+    axios.post('/api/auth/password', {
       'email': state.email,
       'redirect_url': 'http://localhost:8000/password/change/',
     })
@@ -102,8 +105,9 @@ export const resetPassword = (state, setErrorText) => {
 
 export const changePassword = (state, setErrorText) => {
   return dispatch => {
+    console.log(state.password);
     dispatch({ type: CHANGE_PASSWORD_STARTED });
-    axios.put('/auth/password', {
+    axios.put('/api/auth/password', {
       'password': state.password,
       'password_confirmation': state.passwordConfirmation,
     })
@@ -122,6 +126,33 @@ export const changePassword = (state, setErrorText) => {
           setErrorText(err.response.data.errors[0]);
         }
         dispatch({ type: CHANGE_PASSWORD_FAILURE, payload: err });
+      });
+  }
+}
+
+export const guestLogin = (state) => {
+  return dispatch => {
+    dispatch({ type: GUEST_LOGIN_STARTED });
+    axios.post('/api/auth/guest_sign_in')
+      .then(res => {
+        console.log(res);
+        console.log(res.data);
+
+        const authHeaders = {
+          'access-token': res.data.data.token['access-token'],
+          'client': res.data.data.token['client'],
+          'uid': res.data.data.token['uid'],
+          'expiry': res.data.data.token['expiry'],
+          'token-type': res.data.data.token['token-type']
+        }
+        window.localStorage.setItem('authHeaders', JSON.stringify(authHeaders));
+        //ログイン後、ホーム画面へ遷移
+        state.history.push('/');
+        dispatch({ type: GUEST_LOGIN_SUCCESS, payload: res.data.data });
+      })
+      .catch(err => {
+        console.log(err.response);
+        dispatch({ type: GUEST_LOGIN_FAILURE, payload: err });
       });
   }
 }

@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { React, useEffect, useState } from 'react';
 import { useDispatch } from "react-redux";
 import { Link as RouteLink, useHistory } from 'react-router-dom';
-import { login } from "../actions/userActions";
+import { login,guestLogin } from "../actions/userActions";
 import Alert from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,6 +50,10 @@ const Login = () => {
     e.preventDefault();
     dispatch(login(state, setErrorText));
   };
+
+  const guestLoginSubmit= () => {
+    dispatch(guestLogin(state));
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -96,6 +100,15 @@ const Login = () => {
             className={classes.submit}
           >
             ログイン
+          </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            color="secondaly"
+            className={classes.submit}
+            onClick={guestLoginSubmit}
+          >
+            ゲストログイン（閲覧用）
           </Button>
           <Grid container>
             <Grid item xs>

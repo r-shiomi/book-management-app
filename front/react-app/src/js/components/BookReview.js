@@ -132,7 +132,6 @@ const BookReview = () => {
           variant="fullWidth">
           <Tab value="your_reviews" label="あなたの書評・レビュー" className={classes.tab} />
           <Tab value="other_users_reviews" label="他ユーザの書評・レビュー（共読）" className={classes.tab} />
-          <Tab value="rough_draft" label="下書き" className={classes.tab} />
         </Tabs>
         {(data.reviews !== undefined) && (data.reviews.length !== 0) ?
           data.reviews.map((review, idx) =>

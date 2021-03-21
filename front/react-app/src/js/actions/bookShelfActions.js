@@ -74,7 +74,7 @@ export const findBooksByStatus = (status,page) => {
     console.log(status);
     console.log(page);
     dispatch({ type: FIND_BOOKS_BY_STATUS_STARTED });
-    axios.get("http://localhost:3000/api/v1/book_shelves/",{
+    axios.get("/api/v1/book_shelves/",{
       params: {
         'status': status,
         'page': page,

@@ -11,6 +11,9 @@ import {
   CHANGE_PASSWORD_STARTED,
   CHANGE_PASSWORD_FAILURE,
   CHANGE_PASSWORD_SUCCESS,
+  GUEST_LOGIN_STARTED,
+  GUEST_LOGIN_FAILURE,
+  GUEST_LOGIN_SUCCESS,
 } from '../actions/userActions';
 
 const initialState = {
@@ -66,6 +69,16 @@ const userReducer = (state = initialState, action) => {
     }
     case CHANGE_PASSWORD_SUCCESS: {
       return { ...state, loading: false, message: action.payload };
+    }
+      
+    case GUEST_LOGIN_STARTED: {
+      return { ...state, loading: true };
+    }
+    case GUEST_LOGIN_FAILURE: {
+      return { ...state, loading: false, error: action.payload };
+    }
+    case GUEST_LOGIN_SUCCESS: {
+      return { ...state, loading: false, isLoggedin: true, user: action.payload };
     }
       
   }
