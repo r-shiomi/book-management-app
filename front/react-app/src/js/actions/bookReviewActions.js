@@ -19,20 +19,16 @@ export const FIND_NEW_REVIEWS_SUCCESS = 'FIND_NEW_REVIEWS_SUCCESS'
 
 export const registerBook = (state, status) => {
   return dispatch => {
-    console.log(state.bookId);
-    console.log(status);
     dispatch({ type: REGISTER_BOOK_STARTED });
     axios.post(`/api/v1/book_shelves`, {
       bookId: state.bookId,
       status: status,
     })
       .then(res => {
-        console.log(res);
         dispatch({ type: REGISTER_BOOK_SUCCESS, payload: res.data.data });
         dispatch(getBook(state));
       })
       .catch(err => {
-        console.log(err.response);
         dispatch({ type: REGISTER_BOOK_FAILURE, payload: err });
       });
   }
@@ -40,18 +36,14 @@ export const registerBook = (state, status) => {
 
 export const changeBookShelfStatus = (book, status, state) => {
   return dispatch => {
-    console.log(status);
-    console.log(book.bookShelfStatus);
     if (book.bookShelfStatus == status) {
       dispatch({ type: DELETE_BOOK_SHELF_STATUS_STARTED });
       axios.delete(`/api/v1/book_shelves/${book.bookShelfId}`)
         .then(res => {
-          console.log(res);
           dispatch({ type: DELETE_BOOK_SHELF_STATUS_SUCCESS, payload: res.data.data });
           dispatch(getBook(state));
         })
         .catch(err => {
-          console.log(err.response);
           dispatch({ type: DELETE_BOOK_SHELF_STATUS_FAILURE, payload: err });
         });
     } else {
@@ -60,12 +52,10 @@ export const changeBookShelfStatus = (book, status, state) => {
         status: status,
       })
         .then(res => {
-          console.log(res);
           dispatch({ type: UPDATE_BOOK_SHELF_STATUS_SUCCESS, payload: res.data.data });
           dispatch(getBook(state));
         })
         .catch(err => {
-          console.log(err.response);
           dispatch({ type: UPDATE_BOOK_SHELF_STATUS_FAILURE, payload: err });
         });
     }
@@ -75,8 +65,6 @@ export const changeBookShelfStatus = (book, status, state) => {
 
 export const findReviewsByStatus = (status,page) => {
   return dispatch => {
-    console.log(status);
-    console.log(page);
     dispatch({ type: FIND_REVIEWS_BY_STATUS_STARTED });
     axios.get("/api/v1/reviews/fetch_by_status",{
       params: {
@@ -85,11 +73,9 @@ export const findReviewsByStatus = (status,page) => {
       }
     })
       .then(res => {
-        console.log(res);
         dispatch({ type: FIND_REVIEWS_BY_STATUS_SUCCESS, payload: res.data.data });
       })
       .catch(err => {
-        console.log(err.response);
         dispatch({ type: FIND_REVIEWS_BY_STATUS_FAILURE, payload: err });
       });
   }
@@ -97,15 +83,12 @@ export const findReviewsByStatus = (status,page) => {
 
 export const findNewReviews = () => {
   return dispatch => {
-    console.log(axios.defaults.baseURL);
     dispatch({ type: FIND_NEW_REVIEWS_STARTED });
     axios.get("/api/v1/reviews")
       .then(res => {
-        console.log(res);
         dispatch({ type: FIND_NEW_REVIEWS_SUCCESS, payload: res.data.data });
       })
       .catch(err => {
-        console.log(err.response);
         dispatch({ type: FIND_NEW_REVIEWS_FAILURE, payload: err });
       });
   }

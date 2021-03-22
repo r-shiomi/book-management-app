@@ -25,26 +25,13 @@ export const signUp = (state, setError) => {
       'password': state.password,
       'password_confirmation': state.password,
       'confirm_success_url': 'http://localhost:8000/'
-    }
-      // , {
-      // headers: {
-      //   'Content-Type': 'application/json'
-      // }
-      // }
-    )
+    })
       .then(res => {
-        console.log(res);
-        console.log(res.data);
-        console.log(res.data.data);
-        console.log(res.headers);
-        console.log(res.headers['access-token']);
-
         //新規登録後、確認メール送信画面へ遷移
         state.history.replace('/signup/confirm');
         dispatch({ type: SIGNUP_SUCCESS, payload: res.data.data });
       })
       .catch(err => {
-        console.log(err.response);
         setError(err.response);
         dispatch({ type: SIGNUP_FAILURE, payload: err });
       });
@@ -57,24 +44,14 @@ export const login = (state, setErrorText) => {
     axios.post('/api/auth/sign_in', {
       'email': state.email,
       'password': state.password,
-    }
-      // , {
-      // headers: {
-      //   'Content-Type': 'application/json'
-      // }
-      // }
-    )
+    })
       .then(res => {
-        console.log(res);
-        console.log(res.data);
-        console.log(res.headers);
 
         //ログイン後、ホーム画面へ遷移
         state.history.push('/');
         dispatch({ type: LOGIN_SUCCESS, payload: res.data.data });
       })
       .catch(err => {
-        console.log(err.response);
         setErrorText(err.response.data.errors[0]);
         dispatch({ type: LOGIN_FAILURE, payload: err });
       });
@@ -89,14 +66,11 @@ export const resetPassword = (state, setErrorText) => {
       'redirect_url': 'http://localhost:8000/password/change/',
     })
       .then(res => {
-        console.log(res);
-
         //パスワードリセット画面で登録メールを送信後、確認メール送信画面へ遷移
         state.history.replace('/password-reset/confirm');
         dispatch({ type: RESET_PASSWORD_SUCCESS, payload: res.data.message });
       })
       .catch(err => {
-        console.log(err.response);
         setErrorText(err.response.data.errors[0]);
         dispatch({ type: RESET_PASSWORD_FAILURE, payload: err });
       });
@@ -105,21 +79,17 @@ export const resetPassword = (state, setErrorText) => {
 
 export const changePassword = (state, setErrorText) => {
   return dispatch => {
-    console.log(state.password);
     dispatch({ type: CHANGE_PASSWORD_STARTED });
     axios.put('/api/auth/password', {
       'password': state.password,
       'password_confirmation': state.passwordConfirmation,
     })
       .then(res => {
-        console.log(res);
-
         //パスワードリセット画面で登録メールを送信後、確認メール送信画面へ遷移
         state.history.replace('/password/change/success');
         dispatch({ type: CHANGE_PASSWORD_SUCCESS, payload: res.data.message });
       })
       .catch(err => {
-        console.log(err.response);
         if (err.response.data.errors.full_messages) {
           setErrorText(err.response.data.errors.full_messages[0]);
         } else {
@@ -135,9 +105,6 @@ export const guestLogin = (state) => {
     dispatch({ type: GUEST_LOGIN_STARTED });
     axios.post('/api/auth/guest_sign_in')
       .then(res => {
-        console.log(res);
-        console.log(res.data);
-
         const authHeaders = {
           'access-token': res.data.data.token['access-token'],
           'client': res.data.data.token['client'],
@@ -151,7 +118,6 @@ export const guestLogin = (state) => {
         dispatch({ type: GUEST_LOGIN_SUCCESS, payload: res.data.data });
       })
       .catch(err => {
-        console.log(err.response);
         dispatch({ type: GUEST_LOGIN_FAILURE, payload: err });
       });
   }

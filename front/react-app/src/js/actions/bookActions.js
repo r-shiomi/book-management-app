@@ -6,7 +6,6 @@ export const GET_BOOK_SUCCESS = 'GET_BOOK_SUCCESS'
 
 export const getBook = (state) => {
   return dispatch => {
-    console.log(state.bookId);
     dispatch({ type: GET_BOOK_STARTED });
     axios.get(`/api/v1/books/${state.bookId}`,  {
       params: {
@@ -14,11 +13,9 @@ export const getBook = (state) => {
       }
     })
       .then(res => {
-        console.log(res);
         dispatch({ type: GET_BOOK_SUCCESS, payload: res.data.data });
       })
       .catch(err => {
-        console.log(err.response);
         dispatch({ type: GET_BOOK_FAILURE, payload: err });
       });
   }

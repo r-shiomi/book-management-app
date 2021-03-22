@@ -8,14 +8,11 @@ import store from './store.js';
 import axios from 'axios';
 
 axios.defaults.baseURL = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_API_URL : process.env.REACT_APP_DEV_API_URL;
-console.log(axios.defaults.baseURL);
 //APIリクエスト/レスポンス時のトークン設定共通化
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 axios.interceptors.request.use(function (config) {
   const authHeaders = JSON.parse(window.localStorage.getItem('authHeaders'))
   if (authHeaders) {
-    console.log("request");
-    console.log(authHeaders['access-token']);
     config.headers[config.method] = {
       'access-token': authHeaders['access-token'],
       'client': authHeaders['client'],
@@ -36,9 +33,6 @@ axios.interceptors.response.use(function (response) {
       'expiry': response.headers['expiry'],
       'token-type': response.headers['token-type']
     }
-    console.log("response");
-    console.log(response);
-    console.log(response.headers['access-token']);
     window.localStorage.setItem('authHeaders', JSON.stringify(authHeaders));
   } 
   return response;
