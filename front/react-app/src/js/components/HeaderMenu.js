@@ -56,7 +56,8 @@ const HeaderMenu = () => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem to="/password/change" component={RouteLink} onClick={handleClose}>パスワード変更</MenuItem>
+          {user.name != "ゲストユーザー" &&
+            <MenuItem to="/password/change" component={RouteLink} onClick={handleClose}>パスワード変更</MenuItem>}
           <MenuItem onClick={handleLogout}>ログアウト</MenuItem>
         </Menu>
       </div>

@@ -113,9 +113,10 @@ export const guestLogin = (state) => {
           'token-type': res.data.data.token['token-type']
         }
         window.localStorage.setItem('authHeaders', JSON.stringify(authHeaders));
+
         //ログイン後、ホーム画面へ遷移
         state.history.push('/');
-        dispatch({ type: GUEST_LOGIN_SUCCESS, payload: res.data.data });
+        dispatch({ type: GUEST_LOGIN_SUCCESS, payload: res.data.data.user });
       })
       .catch(err => {
         dispatch({ type: GUEST_LOGIN_FAILURE, payload: err });

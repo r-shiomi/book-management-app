@@ -5,6 +5,7 @@ class Api::Auth::SessionsController < DeviseTokenAuth::SessionsController
     sign_in user
     data["token"] = user.create_new_auth_token
     data['message'] = "ゲストユーザーとしてログインしました"
+    data['user'] = user
 
     render json: { status: "SUCCESS", data: data }
   end

@@ -21,7 +21,6 @@ const initialState = {
     id: null,
     email: null,
     name: null,
-    age: null,
   },
   message: null,
   loading: false,
