@@ -15,6 +15,8 @@ export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE'
 export const GUEST_LOGIN_STARTED = 'GUEST_LOGIN_STARTED'
 export const GUEST_LOGIN_SUCCESS = 'GUEST_LOGIN_SUCCESS'
 export const GUEST_LOGIN_FAILURE = 'GUEST_LOGIN_FAILURE'
+const APP_BASE_URL = (process.env.NODE_ENV === 'production') ? 'http://52.198.232.219' :
+'http://localhost:8000'
 
 export const signUp = (state, setError) => {
   return dispatch => {
@@ -24,7 +26,7 @@ export const signUp = (state, setError) => {
       'email': state.email,
       'password': state.password,
       'password_confirmation': state.password,
-      'confirm_success_url': 'http://localhost:8000/'
+      'confirm_success_url': APP_BASE_URL
     })
       .then(res => {
         //新規登録後、確認メール送信画面へ遷移
@@ -63,11 +65,10 @@ export const resetPassword = (state, setErrorText) => {
     dispatch({ type: RESET_PASSWORD_STARTED });
     axios.post('/api/auth/password', {
       'email': state.email,
-      'redirect_url': 'http://localhost:8000/password/change/',
+      'redirect_url': `${APP_BASE_URL}/password/change/`,
     })
       .then(res => {
         //パスワードリセット画面で登録メールを送信後、確認メール送信画面へ遷移
-        console.log(res);
         res.data.success ?
           state.history.replace('/password-reset/confirm') :
           setErrorText("ゲストユーザーのパスワードリセットは行えません");
