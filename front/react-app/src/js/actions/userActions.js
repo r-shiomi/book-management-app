@@ -67,7 +67,11 @@ export const resetPassword = (state, setErrorText) => {
     })
       .then(res => {
         //パスワードリセット画面で登録メールを送信後、確認メール送信画面へ遷移
-        state.history.replace('/password-reset/confirm');
+        console.log(res);
+        res.data.success ?
+          state.history.replace('/password-reset/confirm') :
+          setErrorText("ゲストユーザーのパスワードリセットは行えません");
+
         dispatch({ type: RESET_PASSWORD_SUCCESS, payload: res.data.message });
       })
       .catch(err => {

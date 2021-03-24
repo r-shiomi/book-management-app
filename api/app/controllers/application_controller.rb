@@ -7,16 +7,6 @@ class ApplicationController < ActionController::API
   def error500(error)
     render json: { errors: [{ code: 'E9999', message: '例外が発生しました' }] }, status: :internal_server_error
   end
-  
-  def ensure_normal_user
-    puts "ensure_normal_user"
-    if current_user.email == 'guest@example.com'
-      data = {}
-      data['message'] = "ゲストユーザーの変更・削除はできません。"
-      
-      render json: { status: "SUCCESS", data: data }
-    end
-  end
 
   protected
 
