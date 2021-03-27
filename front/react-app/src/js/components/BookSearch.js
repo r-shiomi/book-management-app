@@ -71,7 +71,7 @@ const BookSearch = () => {
     e.preventDefault();
 
     localStorage.setItem('keyword', JSON.stringify(state.keyword));
-    if (state.keyword) {
+    if (state.keyword.trim()) {
       setErrorText("");
       dispatch(search(state.keyword, state.page));
       setState({ ...state, page: 1 });

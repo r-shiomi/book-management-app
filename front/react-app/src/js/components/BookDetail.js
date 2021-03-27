@@ -115,6 +115,10 @@ const BookDetail = () => {
   const isLoggedin = useSelector(state => state.userReducer.isLoggedin);
   const [errorText, setErrorText] = useState("");
 
+  const reviewContentClear = () => {
+    setState({...state, content: ""});
+  }
+
   const reviewAlertClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -135,6 +139,7 @@ const BookDetail = () => {
   const handleDialogClose = () => {
     setOpen(false);
     setErrorText("");
+    reviewContentClear();
   };
 
   const handleChange = e => {
@@ -143,13 +148,14 @@ const BookDetail = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (!state.content) {
+    if (!state.content.trim()) {
       setErrorText("レビューを入力してください");
-      return;
+    } else {
+      setErrorText(""); 
+      dispatch(createReview(state, setReviewAlertOpen));
+      handleDialogClose();
     }
-    setErrorText(""); 
-    dispatch(createReview(state, setReviewAlertOpen));
-    handleDialogClose();
+    reviewContentClear();
   };
 
   const handleBookShelfClick = (event) => {
