@@ -8,4 +8,5 @@ class Api::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsControl
       
       render json: { success: false, data: data }
     end
+  end
 end

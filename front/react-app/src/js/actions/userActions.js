@@ -30,10 +30,12 @@ export const signUp = (state, setError) => {
     })
       .then(res => {
         //新規登録後、確認メール送信画面へ遷移
+        console.log(res);
         state.history.replace('/signup/confirm');
         dispatch({ type: SIGNUP_SUCCESS, payload: res.data.data });
       })
       .catch(err => {
+        console.log(err);
         setError(err.response);
         dispatch({ type: SIGNUP_FAILURE, payload: err });
       });
