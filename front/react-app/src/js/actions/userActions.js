@@ -15,7 +15,7 @@ export const CHANGE_PASSWORD_FAILURE = 'CHANGE_PASSWORD_FAILURE'
 export const GUEST_LOGIN_STARTED = 'GUEST_LOGIN_STARTED'
 export const GUEST_LOGIN_SUCCESS = 'GUEST_LOGIN_SUCCESS'
 export const GUEST_LOGIN_FAILURE = 'GUEST_LOGIN_FAILURE'
-const APP_BASE_URL = (process.env.NODE_ENV === 'production') ? 'http://52.198.232.219' :
+const APP_BASE_URL = (process.env.NODE_ENV === 'production') ? 'https://www.book-management-app.xyz' :
 'http://localhost:8000'
 
 export const signUp = (state, setError) => {
