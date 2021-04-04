@@ -68,7 +68,6 @@ export const resetPassword = (state, setErrorText) => {
       'redirect_url': `${APP_BASE_URL}/password/change/`,
     })
       .then(res => {
-        //パスワードリセット画面で登録メールを送信後、確認メール送信画面へ遷移
         res.data.success ?
           state.history.replace('/password-reset/confirm') :
           setErrorText("ゲストユーザーのパスワードリセットは行えません");
@@ -90,7 +89,6 @@ export const changePassword = (state, setErrorText) => {
       'password_confirmation': state.passwordConfirmation,
     })
       .then(res => {
-        //パスワードリセット画面で登録メールを送信後、確認メール送信画面へ遷移
         state.history.replace('/password/change/success');
         dispatch({ type: CHANGE_PASSWORD_SUCCESS, payload: res.data.message });
       })
