@@ -1,5 +1,4 @@
 require "httpclient"
-require "pry"
 
 module Api
   module V1
@@ -21,9 +20,11 @@ module Api
         client = HTTPClient.new
         rakuten_res = client.get(uri, query)
         @books = []
+        puts "aaa"
         JSON.parse(rakuten_res.body)["Items"].each do |item|
-          @books << Book.new(read(item))
+          @books << Book.new(Book.read(item))
         end
+        puts "bbb"
 
         resBooks = []
         @books.each do |book|
@@ -64,44 +65,6 @@ module Api
       end
 
       private
-
-      #楽天apiのレスポンスデータから必要な項目を絞り込む
-      def read(item)
-        {
-          "title": item["title"],
-          "author": item["author"],
-          "publisher_name": item["publisherName"],
-          "sales_date": item["salesDate"],
-          "item_caption": item["itemCaption"],
-          "isbn": item["isbn"],
-          "large_image_url": item["largeImageUrl"],
-          "medium_image_url": item["mediumImageUrl"],
-          "item_url": item["itemUrl"],
-          "page_count": get_page_count(item["isbn"]),
-        }
-      end
-
-      #OpenbdApiからページ数を取得する
-      def get_page_count(isbn)
-        uri = "https://api.openbd.jp/v1/get"
-        query = URI.encode_www_form({
-          isbn: isbn,
-        })
-        client = HTTPClient.new
-        openbd_res = client.get(uri, query)
-
-        #apiレスポンスにデータが存在しない時
-        if openbd_res.body == "[null]"
-          return "-"
-        end
-        extentData = JSON.parse(openbd_res.body).first["onix"]["DescriptiveDetail"]["Extent"]
-        unless extentData && extentData.first
-          return "-"
-        end
-
-        #apiレスポンスにページ数が存在する場合
-        return extentData.first["ExtentValue"]
-      end
 
       def set_book
         @book = Book.find(params[:id])

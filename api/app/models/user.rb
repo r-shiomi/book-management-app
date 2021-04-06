@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable,:confirmable
   include DeviseTokenAuth::Concerns::User
 
   validates :name, presence: true, uniqueness: true, length: { maximum: 20 }
@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
       user.password_confirmation = user.password
       user.uid = user.email
       user.provider = 'email'
-      # user.confirmed_at = Time.now  # Confirmable を使用している場合は必要
+      user.confirmed_at = Time.now  # Confirmable を使用している場合は必要
     end
   end
 end

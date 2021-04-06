@@ -22,6 +22,44 @@ class Book < ApplicationRecord
   has_many :book_shelves, dependent: :delete_all
   has_many :book_shelves_users, through: :book_shelves, source: :user
 
+  #楽天apiのレスポンスデータから必要な項目を絞り込む
+  def self.read(item)
+    {
+      "title": item["title"],
+      "author": item["author"],
+      "publisher_name": item["publisherName"],
+      "sales_date": item["salesDate"],
+      "item_caption": item["itemCaption"],
+      "isbn": item["isbn"],
+      "large_image_url": item["largeImageUrl"],
+      "medium_image_url": item["mediumImageUrl"],
+      "item_url": item["itemUrl"],
+      "page_count": Book.get_page_count(item["isbn"]),
+    }
+  end
+
+  #OpenbdApiからページ数を取得する
+  def self.get_page_count(isbn)
+    uri = "https://api.openbd.jp/v1/get"
+    query = URI.encode_www_form({
+      isbn: isbn,
+    })
+    client = HTTPClient.new
+    openbd_res = client.get(uri, query)
+
+    #apiレスポンスにデータが存在しない時
+    if openbd_res.body == "[null]"
+      return "-"
+    end
+    extentData = JSON.parse(openbd_res.body).first["onix"]["DescriptiveDetail"]["Extent"]
+    unless extentData && extentData.first
+      return "-"
+    end
+
+    #apiレスポンスにページ数が存在する場合
+    return extentData.first["ExtentValue"]
+  end
+
   def parse_json
     {
       "id": id,
@@ -52,7 +90,7 @@ class Book < ApplicationRecord
     }
   end
 
-  private 
+  private
 
   def reviews_to_json(reviews)
     res = []
