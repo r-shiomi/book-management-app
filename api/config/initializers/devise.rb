@@ -24,7 +24,8 @@ Devise.setup do |config|
   # Configure the e-mail address which will be shown in Devise::Mailer,
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
-  config.mailer_sender = ENV['EMAIL_ADDRESS']
+  # config.mailer_sender = ENV['EMAIL_ADDRESS']
+  config.mailer_sender = 'book-management-app <noreply@book-management-app.xyz>'
 
   # Configure the class responsible to send e-mails.
   config.mailer = 'Devise::Mailer'
