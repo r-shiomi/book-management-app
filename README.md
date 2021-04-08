@@ -24,7 +24,7 @@ https://www.book-management-app.xyz/ <br>
 - Docker/Docker-compose
 - CircleCi
 # AWS構成図
-
+![book-management-app_aws](https://user-images.githubusercontent.com/39975871/114046090-84439b80-98c3-11eb-9735-e8d610a2948f.png)
 # 機能一覧
 - ユーザー登録、ログイン機能、ゲストログイン機能(devise token auth)
   - メールアドレス認証(メール送信時にamazon sesを使用)
